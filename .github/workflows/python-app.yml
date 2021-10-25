@@ -33,7 +33,7 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       env:
-        MY_TOKEN: абобус
-        USR_ID: 322615766
+        MY_TOKEN: ${{ secrets.TOKEN }}
+        USR_ID: ${{ secrets.USER_ID }}
       run: |
         pytest main.py
