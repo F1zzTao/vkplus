@@ -8,7 +8,7 @@ from vkwave.bots import (
 )
 
 from vkwave.bots.core.dispatching.filters.base import (
-    BaseEvent, BaseFilter, FilterResult
+    BaseFilter, FilterResult
 )
 from vkwave.api.methods._error import APIError
 
@@ -57,7 +57,7 @@ error = "&#9888;"
 @bot.middleware()
 async def fromme(event: BotEvent) -> MiddlewareResult:
     if event.object.object.event_id == 4:
-        with open("config.json","r") as f:
+        with open("config.json", "r") as f:
             content = loads(f.read())
         if event.object.object.message_data.from_id == user_id:
             return MiddlewareResult(True)
@@ -107,7 +107,7 @@ async def for_everyone(event: bot.SimpleBotEvent) -> str:
     with open("config.json", "r") as f:
         content = loads(f.read())
     with open("config.json", "w") as f:
-        if content["work_for_everyone"] == False:
+        if content["work_for_everyone"] is False:
             content["work_for_everyone"] = True
             f.write(dumps(content, indent=4))
             await event.answer("Команды для всех включены "+enabled)
@@ -190,7 +190,7 @@ async def bomb(event: bot.SimpleBotEvent) -> str:
                        text=f'{message}\n\nДанное сообщение взорвется через {n} секунд! &#128163;',)
         await asyncio.sleep(1.0)
     await edit_msg(api_session, bomb_id, event.peer_id,
-                   text=f'БУМ! Взрывная беседа!! &#128165;&#128165;')
+                   text='БУМ! Взрывная беседа!! &#128165;&#128165;')
     await asyncio.sleep(3.0)
     await api_session.messages.delete(peer_id=event.peer_id,
                                       message_ids=bomb_id,
@@ -225,7 +225,7 @@ async def bonk(event: bot.SimpleBotEvent) -> str:
 
 
 @bot.message_handler(CustomCommandFilter("бросить кактус"))
-async def bonk(event: bot.SimpleBotEvent) -> str:
+async def cactus(event: bot.SimpleBotEvent) -> str:
     conv_msg_id = loads(event.object.object.extra_message_data['reply'])['conversation_message_id']
     throw_to = await api_session.messages.get_by_conversation_message_id(peer_id=event.peer_id, conversation_message_ids=conv_msg_id)
     throw_to = throw_to.response.items[0].from_id
@@ -259,7 +259,6 @@ async def demotivator(event: bot.SimpleBotEvent) -> str:
         fnt = ImageFont.truetype("TNR.ttf", 70)
         fnt1 = ImageFont.truetype("TNR.ttf", 40)
         d = ImageDraw.Draw(original)
-        d_paste = ImageDraw.Draw(to_paste)
 
         original.paste(to_paste.resize((609, 517)), (75, 45))
 
