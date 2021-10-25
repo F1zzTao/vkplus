@@ -1,3 +1,3 @@
-vkwave
+https://github.com/fscdev/vkwave/archive/master.zip
 requests
 Pillow
