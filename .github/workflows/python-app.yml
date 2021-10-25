@@ -33,7 +33,7 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       env:
-        MY_TOKEN: 2424ded793af75e3131d6acb100d09a725bfa8196c71bb0e1e9589f16f205b41bbc3e8d9c9d63fe376bf0
+        MY_TOKEN: абобус
         USR_ID: 322615766
       run: |
         pytest main.py
