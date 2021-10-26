@@ -3,10 +3,11 @@ from PIL import Image, ImageDraw, ImageFont
 def test_demotivator():
     first_text = "абобус"
     second_text = "да"
-    photo = "photo_test.png"
+    photo = "tests/dem_generator/photo_test.png"
+    original = "tests/dem_generator/Demotivator.png"
 
     # Создание демотиватора
-    original = Image.open("Demotivator.png").convert('RGB')
+    original = Image.open(original).convert('RGB')
     to_paste = Image.open(photo).convert('RGB')
     fnt = ImageFont.truetype("TNR.ttf", 70)
     fnt1 = ImageFont.truetype("TNR.ttf", 40)
@@ -21,4 +22,4 @@ def test_demotivator():
 
     d.text(((w-W)/2, 575), first_text, font=fnt, fill="white")
     d.text(((w-W1)/2, 650), second_text, font=fnt1, fill="white")
-    original = original.save("DemotivatorFinal.png")
+    original = original.save("tests/dem_generator/DemotivatorFinal.png")
