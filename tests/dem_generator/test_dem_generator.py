@@ -7,7 +7,7 @@ def test_demotivator():
 
     # Создание демотиватора
     original = Image.open("Demotivator.png").convert('RGB')
-    to_paste = Image.open("photo_test.png").convert('RGB')
+    to_paste = Image.open(photo).convert('RGB')
     fnt = ImageFont.truetype("TNR.ttf", 70)
     fnt1 = ImageFont.truetype("TNR.ttf", 40)
     d = ImageDraw.Draw(original)
