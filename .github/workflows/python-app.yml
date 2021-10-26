@@ -36,4 +36,4 @@ jobs:
         MY_TOKEN: ${{ secrets.TOKEN }}
         USR_ID: ${{ secrets.USER_ID }}
       run: |
-        pytest main.py
+        pytest tests/dem_generator/test_dem_generator.py
