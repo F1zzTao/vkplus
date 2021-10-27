@@ -1,7 +1,9 @@
 {
     "token": "",
     "user_id": "",
-    "work_for_everyone": false,
     "prefix": "!",
-    "bomb_time": 10
+    "work_for_everyone": false,
+    "delete_after": 5,
+    "bomb_time": 10,
+    "send_info_in_dm": true
 }
