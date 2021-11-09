@@ -7,7 +7,8 @@ from utils.edit_msg import edit_msg
 from utils.apisession import api_session
 from utils.emojis import error
 from PIL import Image, ImageFont, ImageDraw, ImageOps
-from os import getcwd
+from os import getcwd, mkdir
+from os.path import exists
 import requests
 
 advancements_router = DefaultRouter()
@@ -22,25 +23,29 @@ async def advancements(event: SimpleBotEvent):
         if len(main_text) > 220 or len(second_text) > 220:
             await event.answer('Вы не можете написать больше 220 символов '+error)
             return
-
-        font = ImageFont.truetype(getcwd()+"/minecraft-rus.ttf",40)
+        font = ImageFont.truetype(getcwd().replace('\\','/')+'/minecraft-rus.ttf',40)
         main_text_width = font.getsize(main_text)[0]+25
         second_text_width = font.getsize(second_text)[0]
+
+        if not exists(getcwd().replace('\\','/')+"/output/"):
+            mkdir(getcwd().replace('\\','/')+"/output/")
 
         photo = await api_session.messages.get_by_id(message_ids=event.object.object.message_id)
         try:
             url = photo.response.items[0].attachments[0].photo.sizes[-1].url
             photo_bytes = requests.get(url).content
-            with open(getcwd()+"/output/advancement_output.png", "wb") as f:
+
+            with open(getcwd().replace('\\','/')+"/output/advancement_output.png", "wb") as f:
                 f.write(photo_bytes)
-            im4 = Image.open(getcwd()+"/output/advancement_output.png").convert("RGBA")
+            im4 = Image.open(getcwd().replace('\\','/')+"/output/advancement_output.png").convert("RGBA")
+
         except IndexError:
-            im4 = Image.open(getcwd()+"/icon.png").convert("RGBA")
+            im4 = Image.open(getcwd().replace('\\','/')+"/icon.png").convert("RGBA")
 
         im = Image.new("RGBA",(main_text_width+165 if main_text_width > second_text_width else second_text_width+50,195))
-        im1 = Image.open(getcwd()+"/AdvStart.png").convert("RGBA")
-        im2 = Image.open(getcwd()+"/AdvMiddle.png")
-        im3 = Image.open(getcwd()+"/AdvEnd.png")
+        im1 = Image.open(getcwd().replace('\\','/')+"/AdvStart.png").convert("RGBA")
+        im2 = Image.open(getcwd().replace('\\','/')+"/AdvMiddle.png")
+        im3 = Image.open(getcwd().replace('\\','/')+"/AdvEnd.png")
         im4 = im4.resize((95,90),Image.NEAREST)
 
         for i in range(0,im.width):
@@ -54,11 +59,11 @@ async def advancements(event: SimpleBotEvent):
         d.text((170,40),main_text,font=font)
 
         im = ImageOps.expand(im, border=100, fill="white")
-        im.save(getcwd()+"/output/temp.png")
+        im.save(getcwd().replace('\\','/')+"/output/temp.png")
 
         attachment = await uploader.get_attachment_from_path(
             peer_id=event.peer_id,
-            file_path=getcwd()+"/output/temp.png"
+            file_path=getcwd().replace('\\','/')+"/output/temp.png"
         )
         await edit_msg(api_session, event.object.object.message_id, event.peer_id,
                        attachment=attachment)

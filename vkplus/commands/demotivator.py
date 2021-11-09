@@ -32,14 +32,14 @@ async def demotivator(event: SimpleBotEvent) -> str:
         return
 
     photo_bytes = requests.get(url).content
-    with open(getcwd()+"/output/dem_output.png", "wb") as f:
+    with open(getcwd().replace('\\','/')+"/output/dem_output.png", "wb") as f:
         f.write(photo_bytes)
 
     # Создание демотиватора
-    original = Image.open(getcwd()+"/Demotivator.png").convert('RGB')
-    to_paste = Image.open(getcwd()+"/output/dem_output.png").convert('RGB')
-    fnt = ImageFont.truetype(getcwd()+"/TNR.ttf", 70)
-    fnt1 = ImageFont.truetype(getcwd()+"/TNR.ttf", 40)
+    original = Image.open(getcwd().replace('\\','/')+"/Demotivator.png").convert('RGB')
+    to_paste = Image.open(getcwd().replace('\\','/')+"/output/dem_output.png").convert('RGB')
+    fnt = ImageFont.truetype(getcwd().replace('\\','/')+"/TNR.ttf", 70)
+    fnt1 = ImageFont.truetype(getcwd().replace('\\','/')+"/TNR.ttf", 40)
     d = ImageDraw.Draw(original)
 
     original.paste(to_paste.resize((609, 517)), (75, 45))
@@ -50,12 +50,12 @@ async def demotivator(event: SimpleBotEvent) -> str:
 
     d.text(((w-W)/2, 575), first_text, font=fnt, fill="white")
     d.text(((w-W1)/2, 650), second_text, font=fnt1, fill="white")
-    original = original.save(getcwd()+"/output/DemotivatorFinal.png")
+    original = original.save(getcwd().replace('\\','/')+"/output/DemotivatorFinal.png")
 
     # Отправка демотиватора
     attachment = await uploader.get_attachment_from_path(
         peer_id=event.peer_id,
-        file_path=getcwd()+"/output/DemotivatorFinal.png"
+        file_path=getcwd().replace('\\','/')+"/output/DemotivatorFinal.png"
     )
     await edit_msg(api_session, event.object.object.message_id, event.peer_id,
                    attachment=attachment)

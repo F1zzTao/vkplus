@@ -10,7 +10,7 @@ from os import getcwd
 import asyncio
 
 bomb_router = DefaultRouter()
-config_path = getcwd()+'/config.json'
+config_path = getcwd().replace('\\','/')+'/config.json'
 
 @simple_user_message_handler(bomb_router, CustomCommandFilter("бомба "))
 async def bomb(event: SimpleBotEvent) -> str:

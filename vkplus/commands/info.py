@@ -10,7 +10,7 @@ from inspect import cleandoc
 from os import getcwd
 
 info_router = DefaultRouter()
-config_path = getcwd()+'/config.json'
+config_path = getcwd().replace('\\','/')+'/config.json'
 
 @simple_user_message_handler(info_router, CustomCommandFilter("инфо"))
 async def show_info(event: SimpleBotEvent) -> str:

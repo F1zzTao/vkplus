@@ -5,7 +5,7 @@ from vkwave.bots import SimpleBotEvent
 from json import loads
 from os import getcwd
 
-config_path = getcwd()+'/config.json'
+config_path = getcwd().replace('\\','/')+'/config.json'
 
 # Нормальный фильтр команд
 class CustomCommandFilter(BaseFilter):

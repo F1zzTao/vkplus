@@ -4,7 +4,7 @@ from vkwave.bots import(
 from json import loads
 from os import getcwd
 
-config_path = getcwd()+'/config.json'
+config_path = getcwd().replace('\\','/')+'/config.json'
 
 # Мидлварь на проверку, является ли пользователь
 # пользователем, или же нет.

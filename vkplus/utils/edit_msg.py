@@ -3,7 +3,7 @@ import asyncio
 from vkwave.api.methods._error import APIError
 from os import getcwd
 
-config_path = getcwd()+'/config.json'
+config_path = getcwd().replace('\\','/')+'/config.json'
 
 # Метод для красивого редактированяи сообщения
 async def edit_msg(api_session, msg_id, peerid, text="", attachment=None, m=None):

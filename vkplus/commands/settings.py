@@ -10,7 +10,7 @@ from utils.emojis import enabled, disabled, error
 from os import getcwd
 
 settings_router = DefaultRouter()
-config_path = getcwd()+'/config.json'
+config_path = getcwd().replace('\\','/')+'/config.json'
 
 # Настройки
 @simple_user_message_handler(settings_router, CustomCommandFilter("для всех"))

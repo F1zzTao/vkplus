@@ -9,7 +9,7 @@ from json import loads
 from os import getcwd
 
 config_router = DefaultRouter()
-config_path = getcwd()+'/config.json'
+config_path = getcwd().replace('\\','/')+'/config.json'
 
 @simple_user_message_handler(config_router, CustomCommandFilter('конфиг'))
 async def config(event: SimpleBotEvent):
