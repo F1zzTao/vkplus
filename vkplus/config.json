@@ -1,10 +1,10 @@
 {
-    "token": "c35cc2f50de722479fa04aad03a8ab0cc757c1bd2ec139f06b88605cc9461f0da380e876001fd22967b58",
-    "user_id": "322615766",
+    "token": "",
+    "user_id": "",
     "prefix": "!",
-    "work_for_everyone": true,
+    "work_for_everyone": false,
     "delete_after": 10,
     "bomb_time": 5,
     "send_info_in_dm": true,
-    "edit_or_delete": "delete"
+    "edit_or_delete": "edit"
 }
