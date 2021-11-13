@@ -1,6 +1,7 @@
 from vkwave.bots import (
-    simple_user_message_handler, DefaultRouter,
-    SimpleBotEvent
+    simple_user_message_handler,
+    DefaultRouter,
+    SimpleBotEvent,
 )
 from filters.filters import CustomCommandFilter
 from utils.edit_msg import edit_msg
@@ -10,11 +11,12 @@ from os import getcwd
 import asyncio
 
 bomb_router = DefaultRouter()
-config_path = getcwd().replace('\\','/')+'/config.json'
+config_path = getcwd().replace("\\", "/") + "/config.json"
+
 
 @simple_user_message_handler(bomb_router, CustomCommandFilter("бомба "))
 async def bomb(event: SimpleBotEvent) -> str:
-    message = ' '.join(event.object.object.text.split()[1:])
+    message = " ".join(event.object.object.text.split()[1:])
     with open(config_path, "r") as f:
         content = loads(f.read())
         bomb_time = content["bomb_time"]
@@ -22,12 +24,23 @@ async def bomb(event: SimpleBotEvent) -> str:
         bomb_id = event.object.object.message_id
     else:
         await event.answer("абоба")
-        bomb_id = event.object.object.message_id+1
+        bomb_id = event.object.object.message_id + 1
 
     for n in range(bomb_time, 0, -1):
-        await edit_msg(api_session, bomb_id, event.peer_id,
-                       text=f'{message}\n\nДанное сообщение взорвется через {n} секунд! &#128163;',
-                       m="bomb")
+        await edit_msg(
+            api_session,
+            bomb_id,
+            event.peer_id,
+            text=(
+                f"{message}\n\nДанное сообщение взорвется через {n} секунд!"
+                " &#128163;"
+            ),
+            m="bomb",
+        )
         await asyncio.sleep(1.0)
-    await edit_msg(api_session, bomb_id, event.peer_id,
-                   text='БУМ! Взрывная беседа!! &#128165;&#128165;')
+    await edit_msg(
+        api_session,
+        bomb_id,
+        event.peer_id,
+        text="БУМ! Взрывная беседа!! &#128165;&#128165;",
+    )

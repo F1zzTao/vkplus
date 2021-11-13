@@ -25,12 +25,6 @@ defaultConfig = """{
     "edit_or_delete": "edit"
 }"""
 
-
-def exit_from_programm(code=0):
-    input("\nНажмите Enter, что бы завершить программу... ")
-    raise SystemExit(code)
-
-
 try:
     with open('config.json', 'r') as f:
         content = loads(f.read())

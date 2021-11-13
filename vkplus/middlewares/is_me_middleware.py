@@ -1,15 +1,16 @@
-from vkwave.bots import(
-    MiddlewareResult, BaseMiddleware, SimpleBotEvent
-)
+from vkwave.bots import MiddlewareResult, BaseMiddleware, SimpleBotEvent
 from json import loads
 from os import getcwd
 
-config_path = getcwd().replace('\\','/')+'/config.json'
+config_path = getcwd().replace("\\", "/") + "/config.json"
+
 
 # Мидлварь на проверку, является ли пользователь
 # пользователем, или же нет.
 class FromMeMiddleware(BaseMiddleware):
-    async def pre_process_event(self, event: SimpleBotEvent) -> MiddlewareResult:
+    async def pre_process_event(
+        self, event: SimpleBotEvent
+    ) -> MiddlewareResult:
         if event.object.object.event_id == 4:
             with open(config_path, "r") as f:
                 content = loads(f.read())
