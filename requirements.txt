@@ -1,0 +1,2 @@
+Pillow
+https://github.com/vkbottle/vkbottle/archive/refs/heads/master.zip

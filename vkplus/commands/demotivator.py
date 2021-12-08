@@ -1,41 +1,40 @@
-from vkwave.bots import (
-    simple_user_message_handler,
-    DefaultRouter,
-    SimpleBotEvent,
-    PhotoUploader,
-)
-from filters.filters import CustomCommandFilter
+from vkbottle.tools import PhotoMessageUploader
+from vkbottle.bot import Blueprint, Message
+
+from typing import Optional
 from utils.edit_msg import edit_msg
 from utils.emojis import error
-from utils.apisession import api_session
 import requests
 from PIL import Image, ImageFont, ImageDraw
 from os import getcwd
 
-demotivator_router = DefaultRouter()
-uploader = PhotoUploader(api_session)
+from rich.console import Console
 
 
-@simple_user_message_handler(demotivator_router, CustomCommandFilter("дем "))
-async def demotivator(event: SimpleBotEvent) -> str:
-    text = " ".join(event.object.object.text.split()[1:])
-    if text.find("|") == -1:
-        first_text = text
-        second_text = ""
-    else:
-        first_text = text.split("|")[0]
-        second_text = text.split("|")[1]
+bp = Blueprint("Demotivator generator")
+console = Console()
 
-    photo = await api_session.messages.get_by_id(
-        message_ids=event.object.object.message_id
-    )
+
+@bp.on.message(
+    text=[
+        "<prefix>дем <first_text>|<second_text>",
+        "<prefix>дем <first_text>",
+        "<prefix>дем |<second_text>",
+    ]
+)
+async def demotivator(
+    message: Message,
+    first_text: Optional[str] = "",
+    second_text: Optional[str] = "",
+):
     try:
-        url = photo.response.items[0].attachments[0].photo.sizes[-1].url
+        console.print(message)
+        url = message.attachments[0].photo.sizes[-1].url
     except IndexError:
         await edit_msg(
-            api_session,
-            event.object.object.message_id,
-            event.peer_id,
+            bp.api,
+            message.id,
+            message.peer_id,
             text="Вы не прикрепили фото к сообщению! " + error,
         )
         return
@@ -70,13 +69,14 @@ async def demotivator(event: SimpleBotEvent) -> str:
     )
 
     # Отправка демотиватора
-    attachment = await uploader.get_attachment_from_path(
-        peer_id=event.peer_id,
-        file_path=getcwd().replace("\\", "/") + "/output/DemotivatorFinal.png",
+    attachment = await PhotoMessageUploader(bp.api).upload(
+        getcwd().replace("\\", "/") + "/output/DemotivatorFinal.png",
+        peer_id=message.peer_id
     )
+
     await edit_msg(
-        api_session,
-        event.object.object.message_id,
-        event.peer_id,
+        bp.api,
+        message.id,
+        message.peer_id,
         attachment=attachment,
     )

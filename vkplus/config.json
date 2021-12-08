@@ -1,10 +1,11 @@
 {
-    "token": "",
-    "user_id": "",
+    "token": "54b2fc1783d5ddfbc7fddc84213bba77f114a6ae53135163f68fe9f82198b8f5be1c617f380e93ac237ec",
+    "debug": false,
+    "user_id": "322615766",
     "prefix": "!",
     "work_for_everyone": false,
-    "delete_after": 10,
-    "bomb_time": 5,
+    "delete_after": 5,
+    "bomb_time": 10,
     "send_info_in_dm": true,
-    "edit_or_delete": "edit"
+    "edit_or_send": "edit"
 }

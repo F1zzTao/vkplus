@@ -1,20 +1,22 @@
-from vkwave.bots import MiddlewareResult, BaseMiddleware, SimpleBotEvent
+from vkbottle import BaseMiddleware
 from json import loads
 from os import getcwd
 
-config_path = getcwd().replace("\\", "/") + "/config.json"
-
 
 # Мидлварь на проверку, является ли пользователь
-# пользователем, или же нет.
+# владельцем бота, или нет
 class FromMeMiddleware(BaseMiddleware):
-    async def pre_process_event(
-        self, event: SimpleBotEvent
-    ) -> MiddlewareResult:
-        if event.object.object.event_id == 4:
-            with open(config_path, "r") as f:
-                content = loads(f.read())
-            if event.object.object.message_data.from_id == content["user_id"]:
-                return MiddlewareResult(True)
-            return MiddlewareResult(content["work_for_everyone"])
-        return MiddlewareResult(False)
+    async def pre(self):
+        config_path = getcwd().replace("\\", "/") + "/config.json"
+        with open(config_path, "r") as f:
+            content = loads(f.read())
+        if not self.event.text.startswith(content["prefix"]):
+            self.stop("Сообщение не начинается с префикса")
+        if (
+            int(self.event.from_id) != int(content["user_id"])
+            and content["work_for_everyone"] is False
+        ):
+            print(self.event.from_id)
+            print(content["user_id"])
+            print(content["work_for_everyone"])
+            self.stop("Сообщение было прислано не от владельца")

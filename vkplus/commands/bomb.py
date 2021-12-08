@@ -1,46 +1,41 @@
-from vkwave.bots import (
-    simple_user_message_handler,
-    DefaultRouter,
-    SimpleBotEvent,
-)
-from filters.filters import CustomCommandFilter
+from vkbottle.user import Blueprint, Message
 from utils.edit_msg import edit_msg
-from utils.apisession import api_session
 from json import loads
 from os import getcwd
 import asyncio
 
-bomb_router = DefaultRouter()
+bp = Blueprint("Bomb generator")
 config_path = getcwd().replace("\\", "/") + "/config.json"
 
 
-@simple_user_message_handler(bomb_router, CustomCommandFilter("бомба "))
-async def bomb(event: SimpleBotEvent) -> str:
-    message = " ".join(event.object.object.text.split()[1:])
+@bp.on.message(text="<prefix>бомба <text>")
+async def bomb(message: Message, text):
     with open(config_path, "r") as f:
         content = loads(f.read())
         bomb_time = content["bomb_time"]
-    if content["work_for_everyone"] is not True:
-        bomb_id = event.object.object.message_id
+    if content["work_for_everyone"] is not True or message.from_id == int(
+        content["user_id"]
+    ):
+        bomb_id = message.id
     else:
-        await event.answer("абоба")
-        bomb_id = event.object.object.message_id + 1
+        bomb_id = await message.answer("абоба")
 
     for n in range(bomb_time, 0, -1):
+        print(n)
         await edit_msg(
-            api_session,
+            bp.api,
             bomb_id,
-            event.peer_id,
+            message.peer_id,
             text=(
-                f"{message}\n\nДанное сообщение взорвется через {n} секунд!"
-                " &#128163;"
+                f"{text}\n\nДанное сообщение взорвется через {n} секунд! "
+                "&#128163;"
             ),
             m="bomb",
         )
         await asyncio.sleep(1.0)
     await edit_msg(
-        api_session,
+        bp.api,
         bomb_id,
-        event.peer_id,
-        text="БУМ! Взрывная беседа!! &#128165;&#128165;",
+        message.peer_id,
+        text="БУМ! Взрывная беседа!! &#128165;&#128165;"
     )

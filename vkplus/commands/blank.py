@@ -1,22 +1,17 @@
-from vkwave.bots import (
-    simple_user_message_handler,
-    DefaultRouter,
-    SimpleBotEvent,
-)
-from filters.filters import CustomCommandFilter
+from vkbottle.bot import Blueprint, Message
+
 from utils.edit_msg import edit_msg
-from utils.apisession import api_session
 import re
 
-blank_router = DefaultRouter()
+
+bp = Blueprint("Blank message")
 
 
-@simple_user_message_handler(blank_router, CustomCommandFilter("пустое "))
-async def empty_message(event: SimpleBotEvent) -> str:
-    message = " ".join(event.object.object.text.split()[1:])
-    text = re.sub(r"\w", "&#10240;", message).replace(
+@bp.on.message(text="<prefix>пустое <text>")
+async def empty_message(message: Message, text):
+    text = re.sub(r"\w", "&#10240;", text).replace(
         "<&#10240;&#10240;>", "\n"
     )
     await edit_msg(
-        api_session, event.object.object.message_id, event.peer_id, text=text
+        bp.api, message.id, message.peer_id, text=text
     )

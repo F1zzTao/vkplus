@@ -1,49 +1,45 @@
-from vkwave.bots import (
-    SimpleLongPollUserBot,
-)
+from vkbottle import User, load_blueprints_from_package
 from json import loads
-from commands.settings import settings_router
-from commands.blank import blank_router
-from commands.bomb import bomb_router
-from commands.demotivator import demotivator_router
-from commands.info import info_router
-from commands.settings import settings_router
-from commands.interactive_commands import interactive_router
-from commands.random_case import random_router
-from commands.advancements import advancements_router
-from commands.show_config import config_router
+
 from middlewares.is_me_middleware import FromMeMiddleware
+
+import logging
+from rich.logging import RichHandler
 
 defaultConfig = """{
     "token": "",
+    "debug": false,
     "user_id": "",
     "prefix": "!",
     "work_for_everyone": false,
     "delete_after": 5,
     "bomb_time": 10,
     "send_info_in_dm": true,
-    "edit_or_delete": "edit"
+    "edit_or_send": "edit"
 }"""
 
 try:
-    with open('config.json', 'r') as f:
+    with open("config.json", "r") as f:
         content = loads(f.read())
 except FileNotFoundError:
     print("Конфиг не найден, я его создам, а вы заполните его...")
-    with open('config.json', 'w') as f:
+    with open("config.json", "w") as f:
         f.write(defaultConfig)
         raise FileNotFoundError("Config not found")
 
-bot = SimpleLongPollUserBot(tokens=content["token"])
-bot.middleware_manager.add_middleware(FromMeMiddleware())
-bot.dispatcher.add_router(settings_router)
-bot.dispatcher.add_router(blank_router)
-bot.dispatcher.add_router(bomb_router)
-bot.dispatcher.add_router(demotivator_router)
-bot.dispatcher.add_router(info_router)
-bot.dispatcher.add_router(interactive_router)
-bot.dispatcher.add_router(random_router)
-bot.dispatcher.add_router(advancements_router)
-bot.dispatcher.add_router(config_router)
+FORMAT = "%(message)s"
+logging.basicConfig(
+    level=("DEBUG" if content["debug"] is True else "INFO"),
+    format=FORMAT,
+    datefmt="[%X]",
+    handlers=[RichHandler()],
+)
+
+log = logging.getLogger("rich")
+
+bot = User(content["token"])
+for bp in load_blueprints_from_package("commands"):
+    bp.load(bot)
+bot.labeler.message_view.register_middleware(FromMeMiddleware)
 
 bot.run_forever()
