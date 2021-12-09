@@ -15,7 +15,6 @@ async def config(message: Message):
         bp.api,
         message.id,
         message.peer_id,
-        "Токен: _______________\n"
         f'Айди: {content["user_id"]}\n'
         f'Префикс: {content["prefix"]}\n'
         f'Для всех: {"да" if content["work_for_everyone"] else "нет"}\n'
