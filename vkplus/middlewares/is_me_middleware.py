@@ -14,7 +14,4 @@ class FromMeMiddleware(BaseMiddleware):
             int(self.event.from_id) != int(content["user_id"])
             and content["work_for_everyone"] is False
         ):
-            print(self.event.from_id)
-            print(content["user_id"])
-            print(content["work_for_everyone"])
             self.stop("Сообщение было прислано не от владельца")

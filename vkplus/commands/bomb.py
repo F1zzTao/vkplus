@@ -19,7 +19,6 @@ async def bomb(message: Message, text):
         bomb_id = await message.answer("абоба")
 
     for n in range(bomb_time, 0, -1):
-        print(n)
         await edit_msg(
             bp.api,
             bomb_id,
