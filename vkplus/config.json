@@ -1,10 +1,11 @@
 {
     "token": "",
+    "debug": false,
     "user_id": "",
     "prefix": "!",
     "work_for_everyone": false,
-    "delete_after": 10,
-    "bomb_time": 5,
+    "delete_after": 5,
+    "bomb_time": 10,
     "send_info_in_dm": true,
-    "edit_or_delete": "edit"
+    "edit_or_send": "edit"
 }

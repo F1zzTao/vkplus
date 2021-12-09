@@ -1,60 +1,48 @@
-from vkwave.bots import (
-    simple_user_message_handler,
-    DefaultRouter,
-    SimpleBotEvent,
-    PhotoUploader,
-)
-from filters.filters import CustomCommandFilter
+from vkbottle.tools import PhotoMessageUploader
+from vkbottle.bot import Blueprint, Message
+
+from typing import Optional
 from utils.edit_msg import edit_msg
 from utils.emojis import error
-from utils.apisession import api_session
 import requests
 from PIL import Image, ImageFont, ImageDraw
-from os import getcwd
-
-demotivator_router = DefaultRouter()
-uploader = PhotoUploader(api_session)
 
 
-@simple_user_message_handler(demotivator_router, CustomCommandFilter("дем "))
-async def demotivator(event: SimpleBotEvent) -> str:
-    text = " ".join(event.object.object.text.split()[1:])
-    if text.find("|") == -1:
-        first_text = text
-        second_text = ""
-    else:
-        first_text = text.split("|")[0]
-        second_text = text.split("|")[1]
+bp = Blueprint("Demotivator generator")
 
-    photo = await api_session.messages.get_by_id(
-        message_ids=event.object.object.message_id
-    )
+
+@bp.on.message(
+    text=[
+        "<prefix>дем <first_text>|<second_text>",
+        "<prefix>дем <first_text>",
+        "<prefix>дем |<second_text>",
+    ]
+)
+async def demotivator(
+    message: Message,
+    first_text: Optional[str] = "",
+    second_text: Optional[str] = "",
+):
     try:
-        url = photo.response.items[0].attachments[0].photo.sizes[-1].url
+        url = message.attachments[0].photo.sizes[-1].url
     except IndexError:
         await edit_msg(
-            api_session,
-            event.object.object.message_id,
-            event.peer_id,
+            bp.api,
+            message.id,
+            message.peer_id,
             text="Вы не прикрепили фото к сообщению! " + error,
         )
         return
 
     photo_bytes = requests.get(url).content
-    with open(
-        getcwd().replace("\\", "/") + "/output/dem_output.png", "wb"
-    ) as f:
+    with open("output/dem_output.png", "wb") as f:
         f.write(photo_bytes)
 
     # Создание демотиватора
-    original = Image.open(
-        getcwd().replace("\\", "/") + "/Demotivator.png"
-    ).convert("RGB")
-    to_paste = Image.open(
-        getcwd().replace("\\", "/") + "/output/dem_output.png"
-    ).convert("RGB")
-    fnt = ImageFont.truetype(getcwd().replace("\\", "/") + "/TNR.ttf", 70)
-    fnt1 = ImageFont.truetype(getcwd().replace("\\", "/") + "/TNR.ttf", 40)
+    original = Image.open("Demotivator.png").convert("RGB")
+    to_paste = Image.open("output/dem_output.png").convert("RGB")
+    fnt = ImageFont.truetype("TNR.ttf", 70)
+    fnt1 = ImageFont.truetype("TNR.ttf", 40)
     d = ImageDraw.Draw(original)
 
     original.paste(to_paste.resize((609, 517)), (75, 45))
@@ -65,18 +53,17 @@ async def demotivator(event: SimpleBotEvent) -> str:
 
     d.text(((w - W) / 2, 575), first_text, font=fnt, fill="white")
     d.text(((w - W1) / 2, 650), second_text, font=fnt1, fill="white")
-    original = original.save(
-        getcwd().replace("\\", "/") + "/output/DemotivatorFinal.png"
-    )
+    original = original.save("output/DemotivatorFinal.png")
 
     # Отправка демотиватора
-    attachment = await uploader.get_attachment_from_path(
-        peer_id=event.peer_id,
-        file_path=getcwd().replace("\\", "/") + "/output/DemotivatorFinal.png",
+    attachment = await PhotoMessageUploader(bp.api).upload(
+        "output/DemotivatorFinal.png",
+        peer_id=message.peer_id
     )
+
     await edit_msg(
-        api_session,
-        event.object.object.message_id,
-        event.peer_id,
+        bp.api,
+        message.id,
+        message.peer_id,
         attachment=attachment,
     )
