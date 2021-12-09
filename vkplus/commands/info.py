@@ -5,10 +5,8 @@ from utils.edit_msg import edit_msg
 from utils.emojis import error
 from json import loads
 from inspect import cleandoc
-from os import getcwd
 
 bp = Blueprint("Info command")
-config_path = getcwd().replace("\\", "/") + "/config.json"
 
 
 @bp.on.message(text=["<prefix>инфо", "<prefix>инфо <mention>"])
@@ -16,10 +14,8 @@ async def show_info(message: Message, mention: Optional[str] = None):
     if mention is not None:
         show_about = mention.split("|")[0][1:].replace("id", "")
     elif message.reply_message is not None:
-        print(message.reply_message.from_id)
         show_about = message.reply_message.from_id
     else:
-        print(message)
         await edit_msg(
             bp.api,
             message.id,
@@ -60,7 +56,7 @@ async def show_info(message: Message, mention: Optional[str] = None):
                     Друзей: {"не известно" if show_info.counters is None else show_info.counters.friends}"""  # noqa: E501
     )
 
-    with open(config_path, "r") as f:
+    with open("config.json", "r") as f:
         content = loads(f.read())
 
     if content["send_info_in_dm"] is True:

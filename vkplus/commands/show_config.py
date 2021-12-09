@@ -2,15 +2,14 @@ from vkbottle.user import Blueprint, Message
 
 from utils.edit_msg import edit_msg
 from json import loads
-from os import getcwd
+
 
 bp = Blueprint("Info output")
-config_path = getcwd().replace("\\", "/") + "/config.json"
 
 
 @bp.on.message(text="<prefix>конфиг")
 async def config(message: Message):
-    with open(config_path, "r") as f:
+    with open("config.json", "r") as f:
         content = loads(f.read())
     await edit_msg(
         bp.api,

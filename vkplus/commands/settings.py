@@ -3,20 +3,18 @@ from vkbottle.user import Blueprint, Message
 from utils.edit_msg import edit_msg
 from json import loads, dumps
 from utils.emojis import enabled, disabled, error
-from os import getcwd
 
 
 bp = Blueprint("Settings command")
-config_path = getcwd().replace("\\", "/") + "/config.json"
 
 
 # Настройки
 @bp.on.message(text="<prefix>для всех")
 async def for_everyone(message: Message):
-    with open(config_path, "r") as f:
+    with open("config.json", "r") as f:
         content = loads(f.read())
     if content["work_for_everyone"] is False:
-        with open(config_path, "w") as f:
+        with open("config.json", "w") as f:
             content["work_for_everyone"] = True
             f.write(dumps(content, indent=4))
         await edit_msg(
@@ -27,7 +25,7 @@ async def for_everyone(message: Message):
         )
 
     else:
-        with open(config_path, "w") as f:
+        with open("config.json", "w") as f:
             content["work_for_everyone"] = False
             f.write(dumps(content, indent=4))
         await edit_msg(
@@ -50,9 +48,9 @@ async def set_bomb_time(message: Message, time):
                 text="Время бомбы не может быть меньше 1! " + error,
             )
         else:
-            with open(config_path, "r") as f:
+            with open("config.json", "r") as f:
                 content = loads(f.read())
-            with open(config_path, "w") as f:
+            with open("config.json", "w") as f:
                 content["bomb_time"] = int(message.text.split()[2])
                 f.write(dumps(content, indent=4))
 
@@ -85,9 +83,9 @@ async def set_delete_time(message: Message, time):
                 text="Время удаления не может быть меньше 0! " + error,
             )
         else:
-            with open(config_path, "r") as f:
+            with open("config.json", "r") as f:
                 content = loads(f.read())
-            with open(config_path, "w") as f:
+            with open("config.json", "w") as f:
                 content["delete_after"] = int(message.text.split()[2])
                 f.write(dumps(content, indent=4))
 
@@ -113,9 +111,9 @@ async def set_delete_time(message: Message, time):
 
 @bp.on.message(text="<prefix>префикс <prefix_new>")
 async def set_prefix(message: Message, prefix_new):
-    with open(config_path, "r") as f:
+    with open("config.json", "r") as f:
         content = loads(f.read())
-    with open(config_path, "w") as f:
+    with open("config.json", "w") as f:
         content["prefix"] = prefix_new
         f.write(dumps(content, indent=4))
     await edit_msg(
@@ -128,10 +126,10 @@ async def set_prefix(message: Message, prefix_new):
 
 @bp.on.message(text="<prefix>инфо лс")
 async def info_in_dm(message: Message):
-    with open(config_path, "r") as f:
+    with open("config.json", "r") as f:
         content = loads(f.read())
 
-    f = open(config_path, "w")
+    f = open("config.json", "w")
     if content["send_info_in_dm"] is True:
         content["send_info_in_dm"] = False
         f.write(dumps(content, indent=4))
@@ -157,10 +155,10 @@ async def info_in_dm(message: Message):
 
 @bp.on.message(text="<prefix>ред")
 async def edit_or_del(message: Message):
-    with open(config_path, "r") as f:
+    with open("config.json", "r") as f:
         content = loads(f.read())
 
-    f = open(config_path, "w")
+    f = open("config.json", "w")
     if content["edit_or_send"] == "edit":
         content["edit_or_send"] = "send"
         f.write(dumps(content, indent=4))

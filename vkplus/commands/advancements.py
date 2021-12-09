@@ -5,8 +5,6 @@ from typing import Optional
 from utils.edit_msg import edit_msg
 from utils.emojis import error
 from PIL import Image, ImageFont, ImageDraw, ImageOps
-from os import getcwd, mkdir
-from os.path import exists
 import requests
 
 bp = Blueprint("Advancements generator")
@@ -27,31 +25,26 @@ async def advancements(
         )
         return
     font = ImageFont.truetype(
-        getcwd().replace("\\", "/") + "/minecraft-rus.ttf", 40
+        "minecraft-rus.ttf", 40
     )
     main_text_width = font.getsize(main_text)[0]
     second_text_width = font.getsize(second_text)[0]
-
-    if not exists(getcwd().replace("\\", "/") + "/output/"):
-        mkdir(getcwd().replace("\\", "/") + "/output/")
 
     if len(message.attachments) > 0:
         url = message.attachments[0].photo.sizes[-1].url
         photo_bytes = requests.get(url).content
 
         with open(
-            getcwd().replace("\\", "/") + "/output/advancement_output.png",
+            "output/advancement_output.png",
             "wb",
         ) as f:
             f.write(photo_bytes)
         im4 = Image.open(
-            getcwd().replace("\\", "/") + "/output/advancement_output.png"
+            "output/advancement_output.png"
         ).convert("RGBA")
 
     else:
-        im4 = Image.open(
-            getcwd().replace("\\", "/") + "/icon.png"
-        ).convert("RGBA")
+        im4 = Image.open("icon.png").convert("RGBA")
 
     im = Image.new(
         "RGBA",
@@ -62,11 +55,9 @@ async def advancements(
             195,
         ),
     )
-    im1 = Image.open(
-        getcwd().replace("\\", "/") + "/AdvStart.png"
-    ).convert("RGBA")
-    im2 = Image.open(getcwd().replace("\\", "/") + "/AdvMiddle.png")
-    im3 = Image.open(getcwd().replace("\\", "/") + "/AdvEnd.png")
+    im1 = Image.open("AdvStart.png").convert("RGBA")
+    im2 = Image.open("AdvMiddle.png")
+    im3 = Image.open("AdvEnd.png")
     im4 = im4.resize((95, 90), Image.NEAREST)
 
     for i in range(0, im.width):
@@ -80,11 +71,10 @@ async def advancements(
     d.text((170, 40), main_text, font=font)
 
     im = ImageOps.expand(im, border=100, fill="white")
-    im.save(getcwd().replace("\\", "/") + "/output/temp.png")
+    im.save("output/temp.png")
 
     attachment = await PhotoMessageUploader(bp.api).upload(
-        getcwd().replace("\\", "/") + "/output/temp.png",
-        peer_id=message.peer_id
+        "output/temp.png", peer_id=message.peer_id
     )
 
     await edit_msg(

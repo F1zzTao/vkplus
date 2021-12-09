@@ -1,16 +1,14 @@
 from vkbottle.user import Blueprint, Message
 from utils.edit_msg import edit_msg
 from json import loads
-from os import getcwd
 import asyncio
 
 bp = Blueprint("Bomb generator")
-config_path = getcwd().replace("\\", "/") + "/config.json"
 
 
 @bp.on.message(text="<prefix>бомба <text>")
 async def bomb(message: Message, text):
-    with open(config_path, "r") as f:
+    with open("config.json", "r") as f:
         content = loads(f.read())
         bomb_time = content["bomb_time"]
     if content["work_for_everyone"] is not True or message.from_id == int(
