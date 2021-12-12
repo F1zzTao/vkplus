@@ -7,9 +7,11 @@ from random import randint
 bp = Blueprint("Random case command")
 
 
-@bp.on.message(text="<prefix>рандом <text>")
-async def random_case(message: Message, text):
-    text = text.replace("<br>", "\n")
+# > !рандом какой-то текст
+# > кАкОЙ-ТО тЕкСт
+@bp.on.message(text="<prefix>рандом <!>")
+async def random_case(message: Message):
+    text = message.text.split(" ")[1]
     new_message = ""
     for letter in text:
         if randint(0, 1) == 1:

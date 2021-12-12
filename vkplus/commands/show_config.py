@@ -1,7 +1,7 @@
 from vkbottle.user import Blueprint, Message
 
 from utils.edit_msg import edit_msg
-from json import loads
+import json
 
 
 bp = Blueprint("Info output")
@@ -10,12 +10,11 @@ bp = Blueprint("Info output")
 @bp.on.message(text="<prefix>конфиг")
 async def config(message: Message):
     with open("config.json", "r") as f:
-        content = loads(f.read())
+        content = json.loads(f.read())
     await edit_msg(
         bp.api,
         message.id,
         message.peer_id,
-        "Токен: _______________\n"
         f'Айди: {content["user_id"]}\n'
         f'Префикс: {content["prefix"]}\n'
         f'Для всех: {"да" if content["work_for_everyone"] else "нет"}\n'

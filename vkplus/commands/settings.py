@@ -1,8 +1,8 @@
 from vkbottle.user import Blueprint, Message
 
 from utils.edit_msg import edit_msg
-from json import loads, dumps
 from utils.emojis import enabled, disabled, error
+import json
 
 
 bp = Blueprint("Settings command")
@@ -12,11 +12,11 @@ bp = Blueprint("Settings command")
 @bp.on.message(text="<prefix>для всех")
 async def for_everyone(message: Message):
     with open("config.json", "r") as f:
-        content = loads(f.read())
+        content = json.loads(f.read())
     if content["work_for_everyone"] is False:
         with open("config.json", "w") as f:
             content["work_for_everyone"] = True
-            f.write(dumps(content, indent=4))
+            f.write(json.dumps(content, indent=4))
         await edit_msg(
             bp.api,
             message.id,
@@ -27,7 +27,7 @@ async def for_everyone(message: Message):
     else:
         with open("config.json", "w") as f:
             content["work_for_everyone"] = False
-            f.write(dumps(content, indent=4))
+            f.write(json.dumps(content, indent=4))
         await edit_msg(
             bp.api,
             message.id,
@@ -49,17 +49,19 @@ async def set_bomb_time(message: Message, time):
             )
         else:
             with open("config.json", "r") as f:
-                content = loads(f.read())
+                content = json.loads(f.read())
             with open("config.json", "w") as f:
                 content["bomb_time"] = int(message.text.split()[2])
-                f.write(dumps(content, indent=4))
+                f.write(json.dumps(content, indent=4))
 
             await edit_msg(
                 bp.api,
                 message.id,
                 message.peer_id,
-                text=f"Время бомбы изменено на {content['bomb_time']} секунд "
-                + enabled,
+                text=(
+                    "Время бомбы изменено на "
+                    f"{content['bomb_time']} секунд " + enabled
+                )
             )
 
     except ValueError:
@@ -75,31 +77,6 @@ async def set_bomb_time(message: Message, time):
 async def set_delete_time(message: Message, time):
     try:
         time = int(time)
-        if time < 0:
-            await edit_msg(
-                bp.api,
-                message.id,
-                message.peer_id,
-                text="Время удаления не может быть меньше 0! " + error,
-            )
-        else:
-            with open("config.json", "r") as f:
-                content = loads(f.read())
-            with open("config.json", "w") as f:
-                content["delete_after"] = int(message.text.split()[2])
-                f.write(dumps(content, indent=4))
-
-            await edit_msg(
-                bp.api,
-                message.id,
-                message.peer_id,
-                text=(
-                    "Время удаления изменено на "
-                    f"{content['delete_after']} секунд "
-                )
-                + enabled
-            )
-
     except ValueError:
         await edit_msg(
             bp.api,
@@ -107,15 +84,40 @@ async def set_delete_time(message: Message, time):
             message.peer_id,
             text="Время удаления - не число! " + error
         )
+        return
+
+    if time < 0:
+        await edit_msg(
+            bp.api,
+            message.id,
+            message.peer_id,
+            text="Время удаления не может быть меньше 0! " + error,
+        )
+    else:
+        with open("config.json", "r") as f:
+            content = json.loads(f.read())
+        with open("config.json", "w") as f:
+            content["delete_after"] = int(message.text.split()[2])
+            f.write(json.dumps(content, indent=4))
+
+        await edit_msg(
+            bp.api,
+            message.id,
+            message.peer_id,
+            text=(
+                "Время удаления изменено на "
+                f"{content['delete_after']} секунд " + enabled
+            )
+        )
 
 
 @bp.on.message(text="<prefix>префикс <prefix_new>")
 async def set_prefix(message: Message, prefix_new):
     with open("config.json", "r") as f:
-        content = loads(f.read())
+        content = json.loads(f.read())
     with open("config.json", "w") as f:
         content["prefix"] = prefix_new
-        f.write(dumps(content, indent=4))
+        f.write(json.dumps(content, indent=4))
     await edit_msg(
         bp.api,
         message.id,
@@ -127,12 +129,12 @@ async def set_prefix(message: Message, prefix_new):
 @bp.on.message(text="<prefix>инфо лс")
 async def info_in_dm(message: Message):
     with open("config.json", "r") as f:
-        content = loads(f.read())
+        content = json.loads(f.read())
 
     f = open("config.json", "w")
-    if content["send_info_in_dm"] is True:
+    if content["send_info_in_dm"]:
         content["send_info_in_dm"] = False
-        f.write(dumps(content, indent=4))
+        f.write(json.dumps(content, indent=4))
         f.close()
         await edit_msg(
             bp.api,
@@ -143,7 +145,7 @@ async def info_in_dm(message: Message):
 
     else:
         content["send_info_in_dm"] = True
-        f.write(dumps(content, indent=4))
+        f.write(json.dumps(content, indent=4))
         f.close()
         await edit_msg(
             bp.api,
@@ -156,12 +158,12 @@ async def info_in_dm(message: Message):
 @bp.on.message(text="<prefix>ред")
 async def edit_or_del(message: Message):
     with open("config.json", "r") as f:
-        content = loads(f.read())
+        content = json.loads(f.read())
 
     f = open("config.json", "w")
     if content["edit_or_send"] == "edit":
         content["edit_or_send"] = "send"
-        f.write(dumps(content, indent=4))
+        f.write(json.dumps(content, indent=4))
         f.close()
         await edit_msg(
             bp.api,
@@ -173,12 +175,12 @@ async def edit_or_del(message: Message):
 
     else:
         content["edit_or_send"] = "edit"
-        f.write(dumps(content, indent=4))
+        f.write(json.dumps(content, indent=4))
         f.close()
         await edit_msg(
             bp.api,
             message.id,
             message.peer_id,
-            text="Теперь сообщения будут редактироваться, а не отправляться "
-            + enabled,
+            text="Теперь сообщения будут "
+            "редактироваться, а не отправляться " + enabled
         )

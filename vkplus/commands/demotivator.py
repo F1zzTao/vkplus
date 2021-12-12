@@ -4,11 +4,12 @@ from vkbottle.bot import Blueprint, Message
 from typing import Optional
 from utils.edit_msg import edit_msg
 from utils.emojis import error
-import requests
+import aiohttp
 from PIL import Image, ImageFont, ImageDraw
 
 
 bp = Blueprint("Demotivator generator")
+path = "sources/demotivator/"
 
 
 @bp.on.message(
@@ -34,31 +35,43 @@ async def demotivator(
         )
         return
 
-    photo_bytes = requests.get(url).content
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as resp:
+            photo_bytes = await resp.read()
+
     with open("output/dem_output.png", "wb") as f:
         f.write(photo_bytes)
 
     # Создание демотиватора
-    original = Image.open("Demotivator.png").convert("RGB")
+    original = Image.open(path + "Demotivator.png").convert("RGB")
     to_paste = Image.open("output/dem_output.png").convert("RGB")
-    fnt = ImageFont.truetype("TNR.ttf", 70)
-    fnt1 = ImageFont.truetype("TNR.ttf", 40)
-    d = ImageDraw.Draw(original)
+    fnt = ImageFont.truetype(path + "TNR.ttf", 70)
+    fnt1 = ImageFont.truetype(path + "TNR.ttf", 40)
+    draw = ImageDraw.Draw(original)
 
     original.paste(to_paste.resize((609, 517)), (75, 45))
 
-    w, h = original.size
-    W, H = d.textsize(first_text, font=fnt)
-    W1, H1 = d.textsize(second_text, font=fnt1)
+    photo_width = original.size[0]
+    text_width = draw.textsize(first_text, font=fnt)[0]
+    second_text_width = draw.textsize(second_text, font=fnt1)[0]
 
-    d.text(((w - W) / 2, 575), first_text, font=fnt, fill="white")
-    d.text(((w - W1) / 2, 650), second_text, font=fnt1, fill="white")
+    draw.text(
+        ((photo_width - text_width) / 2, 575),
+        first_text,
+        font=fnt,
+        fill="white",
+    )
+    draw.text(
+        ((photo_width - second_text_width) / 2, 650),
+        second_text,
+        font=fnt1,
+        fill="white",
+    )
     original = original.save("output/DemotivatorFinal.png")
 
     # Отправка демотиватора
     attachment = await PhotoMessageUploader(bp.api).upload(
-        "output/DemotivatorFinal.png",
-        peer_id=message.peer_id
+        "output/DemotivatorFinal.png", peer_id=message.peer_id
     )
 
     await edit_msg(

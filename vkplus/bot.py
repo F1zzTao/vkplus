@@ -1,10 +1,11 @@
 from vkbottle import User, load_blueprints_from_package
-from json import loads
+import json
 
 from middlewares.is_me_middleware import FromMeMiddleware
 
 import logging
 from rich.logging import RichHandler
+
 
 defaultConfig = """{
     "token": "",
@@ -20,7 +21,7 @@ defaultConfig = """{
 
 try:
     with open("config.json", "r") as f:
-        content = loads(f.read())
+        content = json.loads(f.read())
 except FileNotFoundError:
     print("Конфиг не найден, я его создам, а вы заполните его...")
     with open("config.json", "w") as f:

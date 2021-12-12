@@ -1,4 +1,4 @@
-from json import loads
+import json
 import asyncio
 
 
@@ -7,7 +7,7 @@ async def edit_msg(
     api_session, msg_id, peer_id, text="", attachment=None, m=None
 ):
     with open("config.json", "r") as f:
-        content = loads(f.read())
+        content = json.loads(f.read())
 
     if content["edit_or_send"] == "edit" or m is not None:
         await api_session.messages.edit(
