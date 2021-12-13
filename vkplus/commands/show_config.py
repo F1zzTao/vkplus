@@ -1,20 +1,21 @@
 from vkbottle.user import Blueprint, Message
 
 from utils.edit_msg import edit_msg
-from json import loads
+from filters import ForEveryoneRule
+import json
 
 
 bp = Blueprint("Info output")
 
 
-@bp.on.message(text="<prefix>конфиг")
+@bp.on.message(ForEveryoneRule("show_config"), text="<prefix>конфиг")
 async def config(message: Message):
     with open("config.json", "r") as f:
-        content = loads(f.read())
+        content = json.load(f)
     await edit_msg(
         bp.api,
-        message.id,
-        message.peer_id,
+        message,
+        f'Debug: {content["debug"]}\n'
         f'Айди: {content["user_id"]}\n'
         f'Префикс: {content["prefix"]}\n'
         f'Для всех: {"да" if content["work_for_everyone"] else "нет"}\n'
