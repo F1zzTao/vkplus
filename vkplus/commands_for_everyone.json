@@ -1,13 +1,13 @@
 {
-    "advancements": false,
-    "blank": false,
-    "bomb": false,
+    "advancements": true,
+    "blank": true,
+    "bomb": true,
     "code": false,
-    "demotivator": false,
-    "info": false,
-    "interactive_commands": false,
-    "ping": false,
-    "random_case": false,
+    "demotivator": true,
+    "info": true,
+    "interactive_commands": true,
+    "ping": true,
+    "random_case": true,
     "settings": false,
     "show_config": false
 }
