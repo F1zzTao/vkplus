@@ -14,8 +14,6 @@ async def edit_msg(
 ):
     with open("config.json", "r") as f:
         content = json.load(f)
-    print(type(message.from_id))
-    print(type(content["user_id"]))
     if (
         message.from_id == int(content["user_id"])
         and content["edit_or_send"] == "edit"
