@@ -3,6 +3,7 @@ from middlewares.is_me_middleware import FromMeMiddleware
 
 import json
 from time import time
+import os
 
 import logging
 
@@ -17,6 +18,9 @@ defaultConfig = """{
     "send_info_in_dm": true,
     "edit_or_send": "edit",
 }"""
+
+if not os.path.exists('output'):
+    os.mkdir('output')
 
 with open("config.json", "r") as f:
     content = json.load(f)
