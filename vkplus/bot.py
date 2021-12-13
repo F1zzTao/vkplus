@@ -1,10 +1,10 @@
 from vkbottle import User, load_blueprints_from_package
-import json
-
 from middlewares.is_me_middleware import FromMeMiddleware
 
+import json
+from time import time
+
 import logging
-from rich.logging import RichHandler
 
 
 defaultConfig = """{
@@ -12,35 +12,26 @@ defaultConfig = """{
     "debug": false,
     "user_id": "",
     "prefix": "!",
-    "work_for_everyone": false,
     "delete_after": 5,
     "bomb_time": 10,
     "send_info_in_dm": true,
-    "edit_or_send": "edit"
+    "edit_or_send": "edit",
 }"""
 
-try:
-    with open("config.json", "r") as f:
-        content = json.loads(f.read())
-except FileNotFoundError:
-    print("Конфиг не найден, я его создам, а вы заполните его...")
-    with open("config.json", "w") as f:
-        f.write(defaultConfig)
-        raise FileNotFoundError("Config not found")
+with open("config.json", "r") as f:
+    content = json.load(f)
 
 FORMAT = "%(message)s"
 logging.basicConfig(
-    level=("DEBUG" if content["debug"] is True else "INFO"),
-    format=FORMAT,
-    datefmt="[%X]",
-    handlers=[RichHandler()],
+    level=("DEBUG" if content["debug"] is True else "INFO")
 )
-
-log = logging.getLogger("rich")
 
 bot = User(content["token"])
 for bp in load_blueprints_from_package("commands"):
     bp.load(bot)
 bot.labeler.message_view.register_middleware(FromMeMiddleware)
+
+with open("time_started.txt", "w") as f:
+    f.write(str(round(time())))
 
 bot.run_forever()
