@@ -147,8 +147,7 @@ async def set_delete_time_handler(message: Message, time):
 
         await edit_msg(
             bp.api,
-            message.id,
-            message.peer_id,
+            message,
             f"{enabled} | Время удаления изменено на "
             f"{content['delete_after']} секунд",
         )
