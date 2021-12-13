@@ -19,7 +19,6 @@ bp = Blueprint("Code executer command")
 @bp.on.message(ForEveryoneRule("code"), text="<prefix>код<!>\n<!>")
 async def code_handler(message: Message):
     code = '\n'.join(message.text.split("\n")[1:])
-    print(code)
     locals_ = {}
     text = ""
     try:
