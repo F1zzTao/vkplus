@@ -1,23 +1,30 @@
-from vkbottle.user import Message
+"""
+Method for editing message
+"""
 import json
 import asyncio
+from vkbottle.user import Message
 
 
-# Метод для красивого редактированяи сообщения
+"""
+Метод для красивого редактирования сообщения
+"""
+
+
 async def edit_msg(
     api_session,
     message: Message,
     text=None,
     attachment=None,
-    m=None,
-    bomb_id=None
+    mode=None,
+    bomb_id=None,
 ):
-    with open("config.json", "r") as f:
-        content = json.load(f)
+    with open("config.json", "r", encoding="utf-8") as file:
+        content = json.load(file)
     if (
         message.from_id == int(content["user_id"])
         and content["edit_or_send"] == "edit"
-        or m is not None
+        or mode is not None
     ):
         await api_session.messages.edit(
             message=text,
@@ -35,7 +42,7 @@ async def edit_msg(
             random_id=0,
         )
 
-    if content["delete_after"] != 0 and m is None:
+    if content["delete_after"] != 0 and mode is None:
         await asyncio.sleep(content["delete_after"])
         await api_session.messages.delete(
             peer_id=message.peer_id,

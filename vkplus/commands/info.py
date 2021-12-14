@@ -1,13 +1,36 @@
+"""
+Команда, которая пишет всю информацию о человеке
+"""
+import json
+from typing import Optional
 from vkbottle.user import Blueprint, Message
 
-from typing import Optional
 from utils.edit_msg import edit_msg
-from utils.emojis import error
+from utils.emojis import ERROR
 from filters import NotSettingRule
 from filters import ForEveryoneRule
-import json
 
 bp = Blueprint("Info command")
+
+
+"""
+> !инфо @tbogdanov96
+
+> 👥 | Информация о Тимуре Богданове:
+> Айди: 322615766
+> Отображаемый никнейм: tbogdanov96
+> Пол: мужской ♂
+> 🎂 | День рождения: 7.4.1996
+> 🏙 | Город: Rīga
+> 🏢 | Страна: Латвия
+> Онлайн: да 🎾
+> Статус: 🎈 　　 　　　　 　　　　🏃 -Блин! Мой шарик! А ну иди сюда!!!
+> Закрытая страница: нет ✅
+> Друг: недруг(
+> Стена открыта: да ✔
+> Подписчиков: 1
+> Друзей: 428
+"""
 
 
 @bp.on.message(
@@ -15,14 +38,14 @@ bp = Blueprint("Info command")
     ForEveryoneRule("info"),
     text=["<prefix>инфо", "<prefix>инфо <mention>"],
 )
-async def show_info(message: Message, mention: Optional[str] = None):
+async def show_info_handler(message: Message, mention: Optional[str] = None):
     if mention is not None:
         show_about = mention.split("|")[0][1:].replace("id", "")
     elif message.reply_message is not None:
         show_about = message.reply_message.from_id
     else:
         await edit_msg(
-            bp.api, message, text=f"{error} | Вы не ответили никому!"
+            bp.api, message, text=f"{ERROR} | Вы не ответили никому!"
         )
         return
     show_info = await bp.api.users.get(
@@ -54,8 +77,8 @@ async def show_info(message: Message, mention: Optional[str] = None):
         f'Друзей: {"не известно" if show_info.counters is None else show_info.counters.friends}'  # noqa E501
     )
 
-    with open("config.json", "r") as f:
-        content = json.load(f)
+    with open("config.json", "r", encoding="utf-8") as file:
+        content = json.load(file)
 
     if content["send_info_in_dm"] is True:
         await bp.api.messages.send(

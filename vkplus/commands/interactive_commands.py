@@ -1,14 +1,19 @@
+"""
+Roleplay-команды (!me, !бросить кактус и т. д.)
+"""
 from vkbottle.user import Blueprint, Message
 
-from typing import Optional
 from utils.edit_msg import edit_msg
-from utils.emojis import error
+from utils.emojis import ERROR
 from filters import ForEveryoneRule
 
 bp = Blueprint("Interactive commands")
 
 
 class Interactive:
+    """
+    Класс, который возвращает имена людей
+    """
     def __init__(
         self, api, message: Message, split_to: int, name_case: str = "acc"
     ):
@@ -48,11 +53,10 @@ class Interactive:
                     bp.api,
                     self.message,
                     text=(
-                        f"{error} | Вы написали не упоминание, а какую ту"
+                        f"{ERROR} | Вы написали не упоминание, а какую ту"
                         " чушь!"
-                    ),
+                    )
                 )
-                return None
 
         elif self.message.reply_message is not None:
             who = self.message.reply_message.from_id
@@ -69,17 +73,21 @@ class Interactive:
             await edit_msg(
                 bp.api,
                 self.message,
-                text=f"{error} | Вы не ответили никому!",
+                text=f"{ERROR} | Вы не ответили никому!",
             )
-            return None
+        return
 
 
-# > !me съел суши
-# > Тимур Богданов съел суши 💬
+"""
+> !me съел суши
+> Тимур Богданов съел суши 💬
+"""
+
+
 @bp.on.message(
     ForEveryoneRule("interactive_commands"), text="<prefix>me <action>"
 )
-async def me(message: Message, action):
+async def me_handler(message: Message, action):
     who = await bp.api.users.get(user_ids=message.from_id)
     name = who[0].first_name
     last_name = who[0].last_name
@@ -88,13 +96,17 @@ async def me(message: Message, action):
     )
 
 
-# > !бонкнуть @vcirnik
-# > Тимур Богданов бонкнул Влада Сырника 🧹
+"""
+> !бонкнуть @vcirnik
+> Тимур Богданов бонкнул Влада Сырника 🧹
+"""
+
+
 @bp.on.message(
     ForEveryoneRule("interactive_commands"),
     text=["<prefix>бонкнуть", "<prefix>бонкнуть <mention>"],
 )
-async def bonk(message: Message, mention: Optional[str] = None):
+async def bonk_handler(message: Message):
     interactive = Interactive(bp.api, message, 1)
     await edit_msg(
         bp.api,
@@ -106,13 +118,17 @@ async def bonk(message: Message, mention: Optional[str] = None):
     )
 
 
-# > !бросить кактус @vcirnik
-# > Тимур Богданов бросил кактус в Влада Сырника 🌵
+"""
+> !бросить кактус @vcirnik
+> Тимур Богданов бросил кактус в Влада Сырника 🌵
+"""
+
+
 @bp.on.message(
     ForEveryoneRule("interactive_commands"),
     text=["<prefix>бросить кактус", "<prefix>бросить кактус <mention>"],
 )
-async def cactus(message: Message, mention: Optional[str] = None):
+async def cactus_handler(message: Message):
     interactive = Interactive(bp.api, message, 2)
     await edit_msg(
         bp.api,

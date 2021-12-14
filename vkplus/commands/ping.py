@@ -1,33 +1,40 @@
+"""
+Команда, которая показывает, что бот работает
+"""
+import json
+import psutil
+import platform
+from time import time
 from vkbottle.bot import Blueprint, Message
 
 from utils.edit_msg import edit_msg
 from filters import ForEveryoneRule
-from time import time
-import json
-import psutil
-import platform
 
 
 bp = Blueprint("Ping-pong command")
 
 
-# > !пинг
+"""
+> !пинг
 
-# > 🏓 | Понг!
-# > ⏱ | Ответ за 0.05 секунд
+> 🏓 | Понг!
+> ⏱ | Ответ за 0.05 секунд
 
-# (если включен режим debug)
-# > 🏓 | Понг!
-# > ⏱ | Ответ за 0.05 секунд (debug)
-# > 💻 | ОС: Microsoft Windows 11
-# > 🔧 | Процессор: 21.2%
-# > ⚙ | Работает 97 часов (4 дней)
-# > ❤ | [id322615766|VK+]
+(если включен режим debug)
+> 🏓 | Понг!
+> ⏱ | Ответ за 0.05 секунд (debug)
+> 💻 | ОС: Microsoft Windows 11
+> 🔧 | Процессор: 21.2%
+> ⚙ | Работает 97 часов (4 дней)
+> ❤ | [id322615766|VK+]
+"""
+
+
 @bp.on.message(ForEveryoneRule("ping"), text="<prefix>пинг")
 async def ping_handler(message: Message):
     start = time()
-    with open("config.json", "r") as f:
-        content = json.load(f)
+    with open("config.json", "r", encoding="utf-8") as file:
+        content = json.load(file)
 
     if content["debug"] is not True:
         end = time()
@@ -57,8 +64,8 @@ async def ping_handler(message: Message):
             system_version = platform.release()
 
         system = system_name + " " + system_version
-        with open("time_started.txt", "r") as f:
-            work_hours = round((round(time()) - int(f.read())) / 3600, 4)
+        with open("time_started.txt", "r", encoding="utf-8") as file:
+            work_hours = round((round(time()) - int(file.read())) / 3600, 4)
         work_days = work_hours // 24
         end = time()
         result = round(end - start, 4)
