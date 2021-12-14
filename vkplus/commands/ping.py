@@ -1,12 +1,12 @@
 """
 Команда, которая показывает, что бот работает
 """
-import json
-import psutil
-import platform
 from time import time
-from vkbottle.bot import Blueprint, Message
+import json
+import platform
+import psutil
 
+from vkbottle.bot import Blueprint, Message
 from utils.edit_msg import edit_msg
 from filters import ForEveryoneRule
 
@@ -14,24 +14,22 @@ from filters import ForEveryoneRule
 bp = Blueprint("Ping-pong command")
 
 
-"""
-> !пинг
-
-> 🏓 | Понг!
-> ⏱ | Ответ за 0.05 секунд
-
-(если включен режим debug)
-> 🏓 | Понг!
-> ⏱ | Ответ за 0.05 секунд (debug)
-> 💻 | ОС: Microsoft Windows 11
-> 🔧 | Процессор: 21.2%
-> ⚙ | Работает 97 часов (4 дней)
-> ❤ | [id322615766|VK+]
-"""
-
-
 @bp.on.message(ForEveryoneRule("ping"), text="<prefix>пинг")
 async def ping_handler(message: Message):
+    """
+    > !пинг
+
+    > 🏓 | Понг!
+    > ⏱ | Ответ за 0.05 секунд
+
+    (если включен режим debug)
+    > 🏓 | Понг!
+    > ⏱ | Ответ за 0.05 секунд (debug)
+    > 💻 | ОС: Microsoft Windows 11
+    > 🔧 | Процессор: 21.2%
+    > ⚙ | Работает 97 часов (4 дней)
+    > ❤ | [id322615766|VK+]
+    """
     start = time()
     with open("config.json", "r", encoding="utf-8") as file:
         content = json.load(file)

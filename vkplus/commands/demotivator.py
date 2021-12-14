@@ -1,26 +1,19 @@
 """
 Команда, которая генерирует демотиватор
 """
-import aiohttp
 from typing import Optional
+import aiohttp
+from PIL import Image, ImageFont, ImageDraw
+
 from vkbottle.tools import PhotoMessageUploader
 from vkbottle.bot import Blueprint, Message
-
 from utils.edit_msg import edit_msg
 from utils.emojis import ERROR
 from filters import ForEveryoneRule
-from PIL import Image, ImageFont, ImageDraw
 
 
 bp = Blueprint("Demotivator generator")
 PATH = "sources/demotivator/"
-
-
-"""
-!дем [текст1]|[текст2]
-!дем [текст1]
-!дем |[текст2]
-"""
 
 
 @bp.on.message(
@@ -36,6 +29,11 @@ async def demotivator(
     first_text: Optional[str] = "",
     second_text: Optional[str] = "",
 ):
+    """
+    > !дем [текст1]|[текст2]
+    > !дем [текст1]
+    > !дем |[текст2]
+    """
     if len(message.attachments) > 0:
         url = message.attachments[0].photo.sizes[-1].url
         async with aiohttp.ClientSession() as session:

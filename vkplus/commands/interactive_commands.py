@@ -23,26 +23,32 @@ class Interactive:
         self.name_case = name_case
 
     async def get_my_name(self) -> str:
+        """
+        Возвращает имя и фамилию пользователя
+        """
         response = await self.api.users.get(
             user_ids=self.message.from_id, fields="first_name,last_name"
         )
-        return (  # Тимур Богданов
+        return (
             f"{response[0].first_name} {response[0].last_name}"
         )
 
     async def get_target_name(self) -> str:
+        """
+        [id322615766|Тимур Богданов] -> 322615766
+        """
         if len(self.message.text.split()) > self.split_to:
             mention = self.message.text.split()[self.split_to]
             if mention.startswith("["):
                 who = mention.split("|")[0][1:].replace(
                     "id", ""
-                )  # [id322615766|Тимур Богданов] -> 322615766
+                )
                 response = await self.api.users.get(
                     user_ids=who,
                     fields="first_name,last_name",
                     name_case=self.name_case,
                 )
-                return (  # 322615766 -> [id322615766|Тимур Богданов]
+                return (
                     "[id"
                     f"{who}|{response[0].first_name} {response[0].last_name}"
                     "]"
@@ -65,7 +71,7 @@ class Interactive:
                 fields="first_name,last_name",
                 name_case=self.name_case,
             )
-            return (  # 322615766 -> [id322615766|Тимур Богданов]
+            return (
                 f"[id{who}|{response[0].first_name} {response[0].last_name}]"
             )
 
@@ -75,19 +81,16 @@ class Interactive:
                 self.message,
                 text=f"{ERROR} | Вы не ответили никому!",
             )
-        return
-
-
-"""
-> !me съел суши
-> Тимур Богданов съел суши 💬
-"""
 
 
 @bp.on.message(
     ForEveryoneRule("interactive_commands"), text="<prefix>me <action>"
 )
 async def me_handler(message: Message, action):
+    """
+    > !me съел суши
+    > Тимур Богданов съел суши 💬
+    """
     who = await bp.api.users.get(user_ids=message.from_id)
     name = who[0].first_name
     last_name = who[0].last_name
@@ -96,17 +99,15 @@ async def me_handler(message: Message, action):
     )
 
 
-"""
-> !бонкнуть @vcirnik
-> Тимур Богданов бонкнул Влада Сырника 🧹
-"""
-
-
 @bp.on.message(
     ForEveryoneRule("interactive_commands"),
     text=["<prefix>бонкнуть", "<prefix>бонкнуть <mention>"],
 )
 async def bonk_handler(message: Message):
+    """
+    > !бонкнуть @vcirnik
+    > Тимур Богданов бонкнул Влада Сырника 🧹
+    """
     interactive = Interactive(bp.api, message, 1)
     await edit_msg(
         bp.api,
@@ -118,17 +119,15 @@ async def bonk_handler(message: Message):
     )
 
 
-"""
-> !бросить кактус @vcirnik
-> Тимур Богданов бросил кактус в Влада Сырника 🌵
-"""
-
-
 @bp.on.message(
     ForEveryoneRule("interactive_commands"),
     text=["<prefix>бросить кактус", "<prefix>бросить кактус <mention>"],
 )
 async def cactus_handler(message: Message):
+    """
+    > !бросить кактус @vcirnik
+    > Тимур Богданов бросил кактус в Влада Сырника 🌵
+    """
     interactive = Interactive(bp.api, message, 2)
     await edit_msg(
         bp.api,

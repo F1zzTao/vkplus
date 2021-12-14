@@ -39,6 +39,9 @@ bp = Blueprint("Info command")
     text=["<prefix>инфо", "<prefix>инфо <mention>"],
 )
 async def show_info_handler(message: Message, mention: Optional[str] = None):
+    """
+    Отображает информацию о человеке
+    """
     if mention is not None:
         show_about = mention.split("|")[0][1:].replace("id", "")
     elif message.reply_message is not None:

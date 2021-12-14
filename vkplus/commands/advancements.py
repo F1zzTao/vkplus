@@ -1,23 +1,20 @@
 """
 Команда, которая генерирует достижение в стиле Minecraft
 """
-import aiohttp
 from typing import Optional
+from PIL import Image, ImageFont, ImageDraw, ImageOps
+import aiohttp
+
 from vkbottle.tools import PhotoMessageUploader
 from vkbottle.user import Blueprint, Message
 
 from utils.edit_msg import edit_msg
 from utils.emojis import ERROR
 from filters import ForEveryoneRule
-from PIL import Image, ImageFont, ImageDraw, ImageOps
+
 
 bp = Blueprint("Advancements generator")
 PATH = "sources/advancements/"
-
-
-"""
-!ачивка [текст1]|[текст2]
-"""
 
 
 @bp.on.message(
@@ -29,6 +26,9 @@ async def advancements(
     main_text: Optional[str] = "",
     second_text: Optional[str] = "",
 ):
+    """
+    > !ачивка [текст1]|[текст2]
+    """
     if len(main_text) > 220 or len(second_text) > 220:
         await edit_msg(
             bp.api, message,

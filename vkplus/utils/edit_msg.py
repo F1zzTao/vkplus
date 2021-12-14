@@ -6,11 +6,6 @@ import asyncio
 from vkbottle.user import Message
 
 
-"""
-Метод для красивого редактирования сообщения
-"""
-
-
 async def edit_msg(
     api_session,
     message: Message,
@@ -19,6 +14,9 @@ async def edit_msg(
     mode=None,
     bomb_id=None,
 ):
+    """
+    Метод для красивого редактирования сообщения
+    """
     with open("config.json", "r", encoding="utf-8") as file:
         content = json.load(file)
     if (

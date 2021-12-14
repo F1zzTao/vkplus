@@ -12,18 +12,16 @@ from filters import ForEveryoneRule
 bp = Blueprint("Settings command")
 
 
-"""
-Команда для изменения доступности других команд для других людей
-"""
-
-
 @bp.on.message(ForEveryoneRule("settings"), text="<prefix>для всех <command>")
 async def for_everyone_handler(message: Message, command):
+    """
+    Команда для изменения доступности других команд для других людей
+    """
     with open("commands_for_everyone.json", "r", encoding="utf-8") as file:
         content = json.load(file)
 
     if command == "default":
-        with open("commands_for_everyone.json", "w", encoding="utf-8") as f:
+        with open("commands_for_everyone.json", "w", encoding="utf-8") as file:
             content = {
                 "advancements": True,
                 "blank": True,
@@ -37,17 +35,17 @@ async def for_everyone_handler(message: Message, command):
                 "settings": False,
                 "show_config": False,
             }
-            f.write(json.dumps(content, indent=4))
+            file.write(json.dumps(content, indent=4))
         await edit_msg(
             bp.api,
             message,
-            f"{ENABLED} | Настройки для всех вернуты к значению по умолчанию"
+            f"{ENABLED} | Настройки для всех вернуты к значению по умолчанию",
         )
 
     elif command == "none":
         with open("commands_for_everyone.json", "w", encoding="utf-8") as file:
-            for command in content:
-                content[command] = False
+            for allowed_command in content:
+                content[allowed_command] = False
             file.write(json.dumps(content, indent=4))
         await edit_msg(
             bp.api, message, f"{DISABLED} | Все команды для всех выключены"
@@ -55,10 +53,13 @@ async def for_everyone_handler(message: Message, command):
 
     elif command not in content:
         await edit_msg(bp.api, message, f"{ERROR} | Такой команды нет ")
+
     else:
         if content[command]:
             content[command] = False
-            with open("commands_for_everyone.json", "w") as file:
+            with open(
+                "commands_for_everyone.json", "w", encoding="utf-8"
+            ) as file:
                 content[command] = False
                 file.write(json.dumps(content, indent=4))
             await edit_msg(
@@ -66,7 +67,9 @@ async def for_everyone_handler(message: Message, command):
             )
         else:
             content[command] = True
-            with open("commands_for_everyone.json", "w") as file:
+            with open(
+                "commands_for_everyone.json", "w", encoding="utf-8"
+            ) as file:
                 content[command] = True
                 file.write(json.dumps(content, indent=4))
             await edit_msg(
@@ -78,6 +81,9 @@ async def for_everyone_handler(message: Message, command):
 
 @bp.on.message(ForEveryoneRule("settings"), text="<prefix>для всех")
 async def show_for_everyone_handler(message: Message):
+    """
+    Команда для проверки доступности команд для других людей
+    """
     with open("commands_for_everyone.json", "r", encoding="utf-8") as file:
         content = json.load(file)
     text = "Команды для всех:\n"
@@ -91,6 +97,9 @@ async def show_for_everyone_handler(message: Message):
 
 @bp.on.message(ForEveryoneRule("settings"), text="<prefix>время бомбы <time>")
 async def set_bomb_time_handler(message: Message, time):
+    """
+    Команда для настройки времени бомбы (!бомба)
+    """
     try:
         time = int(time)
     except ValueError:
@@ -126,6 +135,9 @@ async def set_bomb_time_handler(message: Message, time):
     ForEveryoneRule("settings"), text="<prefix>время удаления <time>"
 )
 async def set_delete_time_handler(message: Message, time):
+    """
+    Команда для настройки времени удаления всех выполненных команд
+    """
     try:
         time = int(time)
     except ValueError:
@@ -161,6 +173,9 @@ async def set_delete_time_handler(message: Message, time):
     ForEveryoneRule("settings"), text="<prefix>префикс <prefix_new>"
 )
 async def set_prefix_handler(message: Message, prefix_new):
+    """
+    Команда для изменения префикса бота
+    """
     with open("config.json", "r", encoding="utf-8") as file:
         content = json.load(file)
     with open("config.json", "w", encoding="utf-8") as file:
@@ -175,14 +190,17 @@ async def set_prefix_handler(message: Message, prefix_new):
 
 @bp.on.message(ForEveryoneRule("settings"), text="<prefix>инфо лс")
 async def info_in_dm_handler(message: Message):
+    """
+    Команда для изменения отправки информации о людях (!инфо)
+    """
     with open("config.json", "r", encoding="utf-8") as file:
         content = json.load(file)
 
-    file = open("config.json", "w", encoding="utf-8")
     if content["send_info_in_dm"]:
         content["send_info_in_dm"] = False
-        file.write(json.dumps(content, indent=4))
-        file.close()
+        with open("config.json", "w", encoding="utf-8") as file:
+            file.write(json.dumps(content, indent=4))
+            file.close()
         await edit_msg(
             bp.api,
             message,
@@ -191,8 +209,9 @@ async def info_in_dm_handler(message: Message):
 
     else:
         content["send_info_in_dm"] = True
-        file.write(json.dumps(content, indent=4))
-        file.close()
+        with open("config.json", "w", encoding="utf-8") as file:
+            file.write(json.dumps(content, indent=4))
+            file.close()
         await edit_msg(
             bp.api,
             message,
@@ -202,14 +221,17 @@ async def info_in_dm_handler(message: Message):
 
 @bp.on.message(ForEveryoneRule("settings"), text="<prefix>ред")
 async def edit_or_del_handler(message: Message):
+    """
+    Команда для выбора - редактировать, или удалять команды
+    """
     with open("config.json", "r", encoding="utf-8") as file:
         content = json.load(file)
 
-    file = open("config.json", "w", encoding="utf-8")
     if content["edit_or_send"] == "edit":
         content["edit_or_send"] = "send"
-        file.write(json.dumps(content, indent=4))
-        file.close()
+        with open("config.json", "w", encoding="utf-8") as file:
+            file.write(json.dumps(content, indent=4))
+            file.close()
         await edit_msg(
             bp.api,
             message,
@@ -219,8 +241,9 @@ async def edit_or_del_handler(message: Message):
 
     else:
         content["edit_or_send"] = "edit"
-        file.write(json.dumps(content, indent=4))
-        file.close()
+        with open("config.json", "w", encoding="utf-8") as file:
+            file.write(json.dumps(content, indent=4))
+            file.close()
         await edit_msg(
             bp.api,
             message,
@@ -231,18 +254,22 @@ async def edit_or_del_handler(message: Message):
 
 @bp.on.message(ForEveryoneRule("settings"), text="<prefix>debug")
 async def debug_mode_handler(message: Message):
+    """
+    Команда для включения и выключения режима debug
+    """
     with open("config.json", "r", encoding="utf-8") as file:
         content = json.load(file)
 
-    f = open("config.json", "w", encoding="utf-8")
     if content["debug"]:
         content["debug"] = False
-        f.write(json.dumps(content, indent=4))
-        f.close()
+        with open("config.json", "w", encoding="utf-8") as file:
+            file.write(json.dumps(content, indent=4))
+            file.close()
         await edit_msg(bp.api, message, f"{DISABLED} | Debug-режим выключен")
 
     else:
         content["debug"] = True
-        f.write(json.dumps(content, indent=4))
-        f.close()
+        with open("config.json", "w", encoding="utf-8") as file:
+            file.write(json.dumps(content, indent=4))
+            file.close()
         await edit_msg(bp.api, message, f"{ENABLED} | Debug-режим включен")

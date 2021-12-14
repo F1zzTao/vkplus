@@ -10,12 +10,13 @@ from filters import ForEveryoneRule
 
 bp = Blueprint("Random case command")
 
-"""
-> !рандом какой-то текст
-> кАкОЙ-ТО тЕкСт
-"""
+
 @bp.on.message(ForEveryoneRule("random_case"), text="<prefix>рандом <!>")
 async def random_case(message: Message):
+    """
+    > !рандом какой-то текст
+    > кАкОЙ-ТО тЕкСт
+    """
     text = message.text.split(" ")[1]
     new_message = ""
     for letter in text:

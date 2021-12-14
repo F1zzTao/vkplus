@@ -11,21 +11,19 @@ from filters import ForEveryoneRule
 bp = Blueprint("Info output")
 
 
-"""
-> !конфиг
-
-> Debug: False
-> Айди: 322615766
-> Префикс: !
-> Удалять после: 10 секунд
-> Время бомбы: 10 секунд
-> Информация о человеке в лс: да
-> Редактировать, или отправлять: редактировать
-"""
-
-
 @bp.on.message(ForEveryoneRule("show_config"), text="<prefix>конфиг")
 async def config(message: Message):
+    """
+    > !конфиг
+
+    > Debug: False
+    > Айди: 322615766
+    > Префикс: !
+    > Удалять после: 10 секунд
+    > Время бомбы: 10 секунд
+    > Информация о человеке в лс: да
+    > Редактировать, или отправлять: редактировать
+    """
     with open("config.json", "r", encoding="utf-8") as file:
         content = json.load(file)
     await edit_msg(

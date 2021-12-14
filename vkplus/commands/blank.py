@@ -11,14 +11,12 @@ from filters import ForEveryoneRule
 bp = Blueprint("Blank message")
 
 
-"""
-> !пустое какой-то текст
-> ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-"""
-
-
 @bp.on.message(ForEveryoneRule("blank"), text="<prefix>пустое <!>")
 async def empty_message(message: Message):
+    """
+    > !пустое какой-то текст
+    > ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+    """
     text = ' '.join(message.text.split()[1:])
     text = re.sub(r"\w", "⠀", text)
     await edit_msg(

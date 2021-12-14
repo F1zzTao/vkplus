@@ -11,20 +11,18 @@ from filters import ForEveryoneRule
 bp = Blueprint("Bomb generator")
 
 
-"""
-> !бомба @vcirnik лох
-
-> @vcirnik лох
-> Данное сообщение взорвется через 7 секунд 💣
-
-(спустя 7 секунд)
-
-> БУМ! Взрывная беседа!! 💥💥
-"""
-
-
 @bp.on.message(ForEveryoneRule("bomb"), text="<prefix>бомба <text>")
 async def bomb(message: Message, text):
+    """
+    > !бомба @vcirnik лох
+
+    > @vcirnik лох
+    > Данное сообщение взорвется через 7 секунд 💣
+
+    (спустя 7 секунд)
+
+    > БУМ! Взрывная беседа!! 💥💥
+    """
     with open("config.json", "r", encoding="utf-8") as file:
         content = json.load(file)
         bomb_time = content["bomb_time"]
@@ -43,7 +41,7 @@ async def bomb(message: Message, text):
                 f"{text}\n\nДанное сообщение взорвется через {second} секунд! "
                 "&#128163;"
             ),
-            m="bomb",
+            mode="bomb",
             bomb_id=bomb_id
         )
         await asyncio.sleep(1.0)
