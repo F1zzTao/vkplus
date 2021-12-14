@@ -1,6 +1,8 @@
 """
 Команда, которая генерирует бомбу на время заданное в конфиге
 """
+# pylint: disable=duplicate-code
+
 import json
 import asyncio
 from vkbottle.user import Blueprint, Message
