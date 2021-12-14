@@ -34,6 +34,8 @@ async def demotivator(
     > !дем [текст1]
     > !дем |[текст2]
     """
+    # pylint: disable=too-many-locals
+    # pylint: disable=duplicate-code
     if len(message.attachments) > 0:
         url = message.attachments[0].photo.sizes[-1].url
         async with aiohttp.ClientSession() as session:

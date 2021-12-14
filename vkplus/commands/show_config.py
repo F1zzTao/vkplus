@@ -26,6 +26,7 @@ async def config(message: Message):
     """
     with open("config.json", "r", encoding="utf-8") as file:
         content = json.load(file)
+    # pylint: disable=line-too-long
     await edit_msg(
         bp.api,
         message,

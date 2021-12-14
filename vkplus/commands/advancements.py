@@ -29,6 +29,7 @@ async def advancements(
     """
     > !ачивка [текст1]|[текст2]
     """
+    # pylint: disable=too-many-locals
     if len(main_text) > 220 or len(second_text) > 220:
         await edit_msg(
             bp.api, message,
@@ -39,6 +40,7 @@ async def advancements(
     main_text_width = font.getsize(main_text)[0] + 180
     second_text_width = font.getsize(second_text)[0]
 
+    # pylint: disable=duplicate-code
     if len(message.attachments) > 0:
         url = message.attachments[0].photo.sizes[-1].url
         async with aiohttp.ClientSession() as session:
