@@ -1,6 +1,3 @@
-"""
-Method for editing message
-"""
 import json
 import asyncio
 from vkbottle.user import Message

@@ -1,15 +1,11 @@
-"""
-Middleware that ckecks if user is the owner of the bot
-"""
 import json
 from vkbottle import BaseMiddleware
 
 
-# Мидлварь на проверку, является ли пользователь
-# владельцем бота, или нет
 class FromMeMiddleware(BaseMiddleware):
     """
-    Middleware that ckecks if user is the owner of the bot
+    Миддлварь, который проверяет, явялется ли пользователь
+    владельцем бота, или же нет
     """
     async def pre(self):
         with open("config.json", "r", encoding="utf-8") as file:

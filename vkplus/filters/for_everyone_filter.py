@@ -1,6 +1,3 @@
-"""
-Filter to check if user can use command
-"""
 import json
 from vkbottle.dispatch.rules import ABCRule
 from vkbottle.user import Message
@@ -8,7 +5,7 @@ from vkbottle.user import Message
 
 class ForEveryoneRule(ABCRule[Message]):
     """
-    Filter to check if user can use command
+    Фильтр для проверки, может ли пользователь использовать команду
     """
     def __init__(self, short_name: str):
         self.short_name = short_name

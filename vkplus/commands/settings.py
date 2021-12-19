@@ -200,7 +200,6 @@ async def info_in_dm_handler(message: Message):
         content["send_info_in_dm"] = False
         with open("config.json", "w", encoding="utf-8") as file:
             file.write(json.dumps(content, indent=4))
-            file.close()
         await edit_msg(
             bp.api,
             message,
@@ -211,7 +210,6 @@ async def info_in_dm_handler(message: Message):
         content["send_info_in_dm"] = True
         with open("config.json", "w", encoding="utf-8") as file:
             file.write(json.dumps(content, indent=4))
-            file.close()
         await edit_msg(
             bp.api,
             message,
@@ -231,7 +229,6 @@ async def edit_or_del_handler(message: Message):
         content["edit_or_send"] = "send"
         with open("config.json", "w", encoding="utf-8") as file:
             file.write(json.dumps(content, indent=4))
-            file.close()
         await edit_msg(
             bp.api,
             message,
@@ -243,7 +240,6 @@ async def edit_or_del_handler(message: Message):
         content["edit_or_send"] = "edit"
         with open("config.json", "w", encoding="utf-8") as file:
             file.write(json.dumps(content, indent=4))
-            file.close()
         await edit_msg(
             bp.api,
             message,
@@ -264,12 +260,10 @@ async def debug_mode_handler(message: Message):
         content["debug"] = False
         with open("config.json", "w", encoding="utf-8") as file:
             file.write(json.dumps(content, indent=4))
-            file.close()
         await edit_msg(bp.api, message, f"{DISABLED} | Debug-режим выключен")
 
     else:
         content["debug"] = True
         with open("config.json", "w", encoding="utf-8") as file:
             file.write(json.dumps(content, indent=4))
-            file.close()
         await edit_msg(bp.api, message, f"{ENABLED} | Debug-режим включен")

@@ -1,13 +1,11 @@
-"""
-Filter that prevents the commands "!info" and "!info dm" from collising
-"""
 from vkbottle.dispatch.rules import ABCRule
 from vkbottle.user import Message
 
 
 class NotSettingRule(ABCRule[Message]):
     """
-    Filter that prevents the commands "!info" and "!info dm" from collising
+    Правило, которое следит, что бы команды
+    !инфо и !инфо лс не пересекались
     """
     async def check(self, event: Message) -> bool:
         if len(event.text.split()) > 1:
