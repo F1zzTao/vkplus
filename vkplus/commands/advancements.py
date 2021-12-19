@@ -30,7 +30,6 @@ async def advancements(
     """
     > !ачивка [текст1]|[текст2]
     """
-    # pylint: disable=too-many-locals
     if len(main_text) > 220 or len(second_text) > 220:
         await edit_msg(
             bp.api, message,
@@ -39,7 +38,6 @@ async def advancements(
         return
     main_text_width = FONT.getsize(main_text)[0] + 180
     second_text_width = FONT.getsize(second_text)[0]
-
 
     if len(message.attachments) > 0:
         url = message.attachments[0].photo.sizes[-1].url

@@ -10,7 +10,6 @@ from filters import ForEveryoneRule
 bp = Blueprint("Code executer command")
 
 
-# pylint: disable=exec-used, broad-except
 @bp.on.message(ForEveryoneRule("code"), text="<prefix>код<!>\n<!>")
 async def code_handler(message: Message):
     """

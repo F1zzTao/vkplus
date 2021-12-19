@@ -6,7 +6,6 @@ import asyncio
 from vkbottle.user import Message
 
 
-# pylint: disable=too-many-arguments
 async def edit_msg(
     api_session,
     message: Message,

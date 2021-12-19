@@ -39,7 +39,7 @@ class Interactive:
         """
         if len(self.message.text.split()) > self.split_to:
             mention = self.message.text.split()[self.split_to]
-            if mention.startswith("["):  # pylint: disable=no-else-return
+            if mention.startswith("["):
                 who = mention.split("|")[0][1:].replace(
                     "id", ""
                 )

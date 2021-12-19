@@ -1,4 +1,0 @@
-https://github.com/vkbottle/vkbottle/archive/refs/heads/master.zip
-Pillow
-aiohttp
-psutil
