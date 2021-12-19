@@ -1,3 +1,6 @@
-enabled = "&#9989;"
-disabled = "&#10060;"
-error = "&#9888;"
+"""
+List of available emojis
+"""
+ENABLED = "&#9989;"
+DISABLED = "&#10060;"
+ERROR = "&#9888;"

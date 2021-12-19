@@ -1,31 +1,27 @@
+"""
+VK+ by Timur Bogdanov (timius100)
+
+Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
+Everyone is permitted to copy and distribute verbatim copies
+of this license document, but changing it is not allowed.
+
+More information: https://github.com/timius100/vkplus
+"""
+import json
+import os
+import logging
+from time import time
+
 from vkbottle import User, load_blueprints_from_package
 from middlewares.is_me_middleware import FromMeMiddleware
 
-import json
-from time import time
-import os
-
-import logging
-
-
-defaultConfig = """{
-    "token": "",
-    "debug": false,
-    "user_id": "",
-    "prefix": "!",
-    "delete_after": 5,
-    "bomb_time": 10,
-    "send_info_in_dm": true,
-    "edit_or_send": "edit",
-}"""
 
 if not os.path.exists('output'):
     os.mkdir('output')
 
-with open("config.json", "r") as f:
-    content = json.load(f)
+with open("config.json", "r", encoding="utf-8") as file:
+    content = json.load(file)
 
-FORMAT = "%(message)s"
 logging.basicConfig(
     level=("DEBUG" if content["debug"] is True else "INFO")
 )
@@ -35,7 +31,7 @@ for bp in load_blueprints_from_package("commands"):
     bp.load(bot)
 bot.labeler.message_view.register_middleware(FromMeMiddleware)
 
-with open("time_started.txt", "w") as f:
-    f.write(str(round(time())))
+with open("time_started.txt", "w", encoding="utf-8") as file:
+    file.write(str(round(time())))
 
 bot.run_forever()

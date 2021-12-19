@@ -1,1 +1,4 @@
 __pycache__/
+config.json
+commands_for_everyone.json
+time_started.txt
