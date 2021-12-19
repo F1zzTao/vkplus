@@ -17,7 +17,7 @@ async def random_case(message: Message):
     > !рандом какой-то текст
     > кАкОЙ-ТО тЕкСт
     """
-    text = message.text.split(" ")[1]
+    text = ' '.join(message.text.split()[1:])
     new_message = ""
     for letter in text:
         if randint(0, 1) == 1:

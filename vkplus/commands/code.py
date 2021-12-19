@@ -10,6 +10,7 @@ from filters import ForEveryoneRule
 bp = Blueprint("Code executer command")
 
 
+# pylint: disable=exec-used, broad-except
 @bp.on.message(ForEveryoneRule("code"), text="<prefix>код<!>\n<!>")
 async def code_handler(message: Message):
     """
@@ -27,12 +28,12 @@ async def code_handler(message: Message):
     locals_ = {"message": message, "bp": bp}
     text = ""
     try:
-        # pylint: disable=exec-used
         exec(code.replace("~", " "), None, locals_)
-        for key, var in locals_.items():
-            if key not in ("message", "bp"):
-                text += f"{key}: {type(var).__name__} = {var}\n"
-        await edit_msg(bp.api, message, text)
-    # pylint: disable=exec-used, broad-except
     except Exception as exc:
         await edit_msg(bp.api, message, exc)
+        return
+
+    for key, var in locals_.items():
+        if key not in ("message", "bp"):
+            text += f"{key}: {type(var).__name__} = {var}\n"
+    await edit_msg(bp.api, message, text)

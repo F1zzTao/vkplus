@@ -2,18 +2,20 @@
 Команда, которая генерирует демотиватор
 """
 from typing import Optional
-import aiohttp
 from PIL import Image, ImageFont, ImageDraw
 
 from vkbottle.tools import PhotoMessageUploader
 from vkbottle.bot import Blueprint, Message
 from utils.edit_msg import edit_msg
 from utils.emojis import ERROR
+from utils.request_url import request
 from filters import ForEveryoneRule
 
 
 bp = Blueprint("Demotivator generator")
 PATH = "sources/demotivator/"
+FNT = ImageFont.truetype(PATH + "TNR.ttf", 70)
+FNT_SEC = ImageFont.truetype(PATH + "TNR.ttf", 40)
 
 
 @bp.on.message(
@@ -34,13 +36,10 @@ async def demotivator(
     > !дем [текст1]
     > !дем |[текст2]
     """
-    # pylint: disable=too-many-locals
-    # pylint: disable=duplicate-code
+
     if len(message.attachments) > 0:
         url = message.attachments[0].photo.sizes[-1].url
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url) as resp:
-                photo_bytes = await resp.read()
+        photo_bytes = await request(url)
 
         with open("output/dem_output.png", "wb") as file:
             file.write(photo_bytes)
@@ -53,26 +52,24 @@ async def demotivator(
     # Создание демотиватора
     original = Image.open(PATH + "dem.png").convert("RGB")
     to_paste = Image.open("output/dem_output.png").convert("RGB")
-    fnt = ImageFont.truetype(PATH + "TNR.ttf", 70)
-    fnt1 = ImageFont.truetype(PATH + "TNR.ttf", 40)
     draw = ImageDraw.Draw(original)
 
     original.paste(to_paste.resize((609, 517)), (75, 45))
 
     photo_width = original.size[0]
-    text_width = draw.textsize(first_text, font=fnt)[0]
-    second_text_width = draw.textsize(second_text, font=fnt1)[0]
+    text_width = draw.textsize(first_text, font=FNT)[0]
+    second_text_width = draw.textsize(second_text, font=FNT_SEC)[0]
 
     draw.text(
         ((photo_width - text_width) / 2, 575),
         first_text,
-        font=fnt,
+        font=FNT,
         fill="white",
     )
     draw.text(
         ((photo_width - second_text_width) / 2, 650),
         second_text,
-        font=fnt1,
+        font=FNT_SEC,
         fill="white"
     )
     original = original.save("output/dem_final.png")

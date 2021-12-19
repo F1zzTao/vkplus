@@ -22,7 +22,6 @@ if not os.path.exists('output'):
 with open("config.json", "r", encoding="utf-8") as file:
     content = json.load(file)
 
-FORMAT = "%(message)s"
 logging.basicConfig(
     level=("DEBUG" if content["debug"] is True else "INFO")
 )

@@ -1,7 +1,7 @@
 """
 Команда, которая генерирует бомбу на время заданное в конфиге
 """
-# pylint: disable=duplicate-code
+
 
 import json
 import asyncio
@@ -26,11 +26,10 @@ async def bomb(message: Message, text):
     > БУМ! Взрывная беседа!! 💥💥
     """
     with open("config.json", "r", encoding="utf-8") as file:
-        content = json.load(file)
-        bomb_time = content["bomb_time"]
-    if content["work_for_everyone"] is not True or message.from_id == int(
-        content["user_id"]
-    ):
+        config = json.load(file)
+        bomb_time = config["bomb_time"]
+
+    if message.from_id == int(config["user_id"]):
         bomb_id = message.id
     else:
         bomb_id = await message.answer("абоба")
