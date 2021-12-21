@@ -49,10 +49,12 @@ async def ping_handler(message: Message):
             cpu = "не известно (android?)"
 
         system_name = platform.system()
-        # На время написания этого комментария, версия kernel32.dll
-        # не изменилась, из-за этого platform.release() пишет 10
-        # вместо 11 на компьютере с Windows 11, поэтому здесь
-        # используется такой способ:
+
+        """
+        Если бот запущен на ОС Windows 11, то platform.release()
+        вернет 10, что бы этого избежать, можно сделать проверку
+        на версию системы:
+        """
         if system_name == "Windows":
             if int(platform.version().split(".")[2]) > 20000:
                 system_version = "11"

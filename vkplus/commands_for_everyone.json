@@ -4,6 +4,7 @@
     "bomb": true,
     "code": false,
     "demotivator": true,
+    "weather": true,
     "info": true,
     "interactive_commands": true,
     "ping": true,

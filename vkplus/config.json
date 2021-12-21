@@ -1,5 +1,6 @@
 {
     "token": "",
+    "owm_api_key": "",
     "debug": false,
     "user_id": "",
     "prefix": "!",

@@ -11,9 +11,6 @@ bp = Blueprint("Interactive commands")
 
 
 class Interactive:
-    """
-    Класс, который возвращает имена людей
-    """
     def __init__(
         self, api, message: Message, split_to: int, name_case: str = "acc"
     ):
