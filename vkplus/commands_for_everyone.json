@@ -1,9 +1,10 @@
 {
     "advancements": true,
+    "demotivator": true,
+    "quote": true,
     "blank": true,
     "bomb": true,
     "code": false,
-    "demotivator": true,
     "weather": true,
     "info": true,
     "interactive_commands": true,
