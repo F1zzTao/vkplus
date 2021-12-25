@@ -1,8 +1,6 @@
 """
 Команда, которая генерирует бомбу на время заданное в конфиге
 """
-
-
 import json
 import asyncio
 from vkbottle.user import Blueprint, Message

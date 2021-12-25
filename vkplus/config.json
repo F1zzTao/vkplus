@@ -1,7 +1,8 @@
 {
     "token": "",
-    "debug": false,
+    "owm_api_key": "",
     "user_id": "",
+    "debug": false,
     "prefix": "!",
     "delete_after": 10,
     "bomb_time": 10,

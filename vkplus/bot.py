@@ -13,7 +13,7 @@ import logging
 from time import time
 
 from vkbottle import User, load_blueprints_from_package
-from middlewares.is_me_middleware import FromMeMiddleware
+from middlewares.has_prefix_middleware import HasPrefixMiddleware
 
 
 if not os.path.exists('output'):
@@ -29,7 +29,7 @@ logging.basicConfig(
 bot = User(content["token"])
 for bp in load_blueprints_from_package("commands"):
     bp.load(bot)
-bot.labeler.message_view.register_middleware(FromMeMiddleware)
+bot.labeler.message_view.register_middleware(HasPrefixMiddleware)
 
 with open("time_started.txt", "w", encoding="utf-8") as file:
     file.write(str(round(time())))

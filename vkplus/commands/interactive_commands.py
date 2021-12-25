@@ -1,5 +1,5 @@
 """
-Roleplay-команды (!me, !бросить кактус и т. д.)
+Roleplay commands (!me, !бросить кактус, etc.)
 """
 from vkbottle.user import Blueprint, Message
 
@@ -11,9 +11,6 @@ bp = Blueprint("Interactive commands")
 
 
 class Interactive:
-    """
-    Класс, который возвращает имена людей
-    """
     def __init__(
         self, api, message: Message, split_to: int, name_case: str = "acc"
     ):
@@ -24,7 +21,7 @@ class Interactive:
 
     async def get_my_name(self) -> str:
         """
-        Возвращает имя и фамилию пользователя
+        Returns first name and last name
         """
         response = await self.api.users.get(
             user_ids=self.message.from_id, fields="first_name,last_name"
@@ -35,7 +32,7 @@ class Interactive:
 
     async def get_target_name(self) -> str:
         """
-        [id322615766|Тимур Богданов] -> 322615766
+        322615766 -> [id322615766|Тимур Богданов]
         """
         if len(self.message.text.split()) > self.split_to:
             mention = self.message.text.split()[self.split_to]
