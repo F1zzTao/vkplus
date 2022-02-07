@@ -11,5 +11,6 @@
     "ping": true,
     "random_case": true,
     "settings": false,
-    "show_config": false
+    "show_config": false,
+    "auto_iris_farm": true
 }
