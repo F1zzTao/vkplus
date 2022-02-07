@@ -7,5 +7,6 @@
     "delete_after": 10,
     "bomb_time": 10,
     "send_info_in_dm": true,
-    "edit_or_send": "edit"
+    "edit_or_send": "edit",
+    "iris_game": true
 }
