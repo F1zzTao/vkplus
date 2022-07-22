@@ -1,11 +1,11 @@
 {
-    "token": "",
+    "token": "vk1.a.nJiG71D6hfEUlqxpyH8-3J-OqCRk9d4Xg913ggxg2Pii87dyvybcyJ0yVpdPRhUM31BWJ4pML51p3OyJnNZP_Ll2IT6M7VTGy9mtCIYVkn2rDxb22u0QkKEeAAZ7YmJvbhZkMnMExJhy8AdDarv_s2jnzEJwJIlAkPKM8yx_XTmpXM2tyz_mcVZzcrhkugwa",
     "owm_api_key": "",
-    "user_id": "",
+    "user_id": "322615766",
     "debug": false,
     "prefix": "!",
-    "delete_after": 10,
+    "delete_after": 0,
     "bomb_time": 10,
     "send_info_in_dm": true,
-    "edit_or_send": "edit"
+    "edit_or_send": "send"
 }

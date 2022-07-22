@@ -1,0 +1,4 @@
+[flake8]
+max-line-length = 100
+per-file-ignores = 
+    vkplus/commands/info.py:E501

@@ -7,7 +7,6 @@ from vkbottle.user import Blueprint, Message
 
 from utils.edit_msg import edit_msg
 from utils.emojis import ERROR
-from filters import NotSettingRule
 from filters import ForEveryoneRule
 
 bp = Blueprint("Info command")
@@ -34,7 +33,6 @@ bp = Blueprint("Info command")
 
 
 @bp.on.message(
-    NotSettingRule(),
     ForEveryoneRule("info"),
     text=["<prefix>инфо", "<prefix>инфо <mention>"],
 )
@@ -89,3 +87,21 @@ async def show_info_handler(message: Message, mention: Optional[str] = None):
         )
     else:
         await edit_msg(bp.api, message, text=text)
+
+
+@bp.on.message(
+    ForEveryoneRule("info"),
+    text=["<prefix>айди беседы"]
+)
+async def show_conversation_id(message: Message):
+    conversation_id = f"Айди беседы: {2000000000-message.peer_id}"
+
+    with open("config.json", "r", encoding="utf-8") as file:
+        content = json.load(file)
+
+    if content["send_info_in_dm"] is True:
+        await bp.api.messages.send(
+            peer_id=content["user_id"], message=conversation_id, random_id=0
+        )
+    else:
+        await edit_msg(bp.api, message, conversation_id)

@@ -16,8 +16,8 @@ async def config(message: Message):
     """
     > !конфиг
 
-    > Debug: False
     > Айди: 322615766
+    > Debug: False
     > Префикс: !
     > Удалять после: 10 секунд
     > Время бомбы: 10 секунд
@@ -29,8 +29,8 @@ async def config(message: Message):
     await edit_msg(
         bp.api,
         message,
-        f'Debug: {content["debug"]}\n'
         f'Айди: {content["user_id"]}\n'
+        f'Debug: {content["debug"]}\n'
         f'Префикс: {content["prefix"]}\n'
         "Удалять после: "
         f'{"не удалять" if content["delete_after"] == 0 else str(content["delete_after"]) + " секунд"}\n'  # noqa: E501
@@ -38,5 +38,5 @@ async def config(message: Message):
         "Информация о человеке в лс: "
         f'{"да" if content["send_info_in_dm"] else "нет"}\n'
         "Редактировать, или отправлять: "
-        f'{"редактировать" if content["edit_or_send"] == "edit" else "отправлять"}',  # noqa: E501
+        f'{"редактировать" if content["edit_or_send"] == "edit" else "отправлять"}'
     )

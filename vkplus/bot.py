@@ -8,30 +8,31 @@ of this license document, but changing it is not allowed.
 More information: https://github.com/timius100/vkplus
 """
 import json
-import os
 import logging
 from time import time
-
-from vkbottle import User, load_blueprints_from_package
+from os import mkdir
+from os.path import exists
 from middlewares.has_prefix_middleware import HasPrefixMiddleware
+from vkbottle import User, load_blueprints_from_package
 
 
-if not os.path.exists('output'):
-    os.mkdir('output')
+if __name__ == "__main__":
+    if not exists('output'):
+        mkdir('output')
 
-with open("config.json", "r", encoding="utf-8") as file:
-    content = json.load(file)
+    with open("config.json", "r", encoding="utf-8") as file:
+        content = json.load(file)
 
-logging.basicConfig(
-    level=("DEBUG" if content["debug"] is True else "INFO")
-)
+    logging.basicConfig(
+        level=("DEBUG" if content["debug"] is True else "INFO")
+    )
 
-bot = User(content["token"])
-for bp in load_blueprints_from_package("commands"):
-    bp.load(bot)
-bot.labeler.message_view.register_middleware(HasPrefixMiddleware)
+    bot = User(content["token"])
+    for bp in load_blueprints_from_package("commands"):
+        bp.load(bot)
+    bot.labeler.message_view.register_middleware(HasPrefixMiddleware)
 
-with open("time_started.txt", "w", encoding="utf-8") as file:
-    file.write(str(round(time())))
+    with open("time_started.txt", "w", encoding="utf-8") as file:
+        file.write(str(round(time())))
 
-bot.run_forever()
+    bot.run_forever()

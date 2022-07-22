@@ -1,0 +1,4 @@
+vkbottle>=4.2.0
+aiohttp
+psutil
+pillow
