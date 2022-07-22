@@ -48,7 +48,7 @@
     },
     "bomb": {
         "allowed": false,
-        "default": true,
+        "default": false,
         "blacklist": [],
         "description": [
             "!бомба - создаёт бомбу с указанным текстом"
